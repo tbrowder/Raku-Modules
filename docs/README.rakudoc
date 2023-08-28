@@ -1,0 +1,29 @@
+=begin pod
+
+=head1 NAME
+
+B<RakudoPkgHelper> - Provides tools for easing use of the 'rakudo-pkg' system for Debian and Ubuntu
+
+=head1 SYNOPSIS
+
+=begin code :lang<raku>
+
+use RakudoPkgHelper;
+
+=end code
+
+=head1 DESCRIPTION
+
+B<RakudoPkgHelper> is ...
+
+=head1 AUTHOR
+
+Tom Browder <tbrowder@acm.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+© 2023 Tom Browder
+
+This library is free software; you may redistribute it or modify it under the Artistic License 2.0.
+
+=end pod

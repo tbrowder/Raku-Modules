@@ -1,0 +1,25 @@
+{
+  "auth": "zef:tbrowder",
+  "authors": [
+    "Tom Browder"
+  ],
+  "build-depends": [
+  ],
+  "depends": [
+  ],
+  "description": "Provides tools for easing use of the 'rakudo-pkg' system for Debian and Ubuntu",
+  "license": "Artistic-2.0",
+  "name": "RakudoPkgHelper",
+  "perl": "6.d",
+  "provides": {
+    "RakudoPkgHelper": "lib/RakudoPkgHelper.rakumod"
+  },
+  "resources": [
+  ],
+  "source-url": "",
+  "tags": [
+  ],
+  "test-depends": [
+  ],
+  "version": "0.0.1"
+}
