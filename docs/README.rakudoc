@@ -18,8 +18,37 @@ B<RakudoPkgHelper> is a Raku module with one script for the root user to bootstr
 installation on a rudumentary 'rakudo' package installation.
 After successful bootstrapping, the 'rakudo' package should be deleted.
 
+=head2 Procedures
 
+=head3 Install the Debian C<rakudo> package
 
+=begin code
+$ sudo apt-get install rakudo
+=end code
+
+=head3 Install the C<rakudo-pkg> framework
+
+=begin code
+$ sudo rp-root install
+=end code
+
+The command does the following:
+
+=item deletes any existing /opt/rakudo-pkg directory
+=item installs the rakudo-pkg framework
+=item installs the new raku package
+=item removes the system rakudo package
+=item installs and updates zef for root
+
+=head3 Install zef for a user
+
+=begin code
+$ rp-user install
+=end code
+
+The command does the following:
+
+=item
 
 =head1 AUTHOR
 
