@@ -6,11 +6,26 @@ use RakudoPkgHelper;
 my $user    = $*USER;
 my $is-root = $user eq 'root' ?? True !! False;
 
+my $inst    = 0;
 if not @*ARGS {
     say qq:to/HERE/;
-    Usage: {$*PROGRAM.basename} go
+    Usage: {$*PROGRAM.basename} install
 
     HERE
     exit
 }
+
+unless $is-root {
+    say "FATAL: This program must be executed by the root user.";
+    exit;
+}
+
+for @*ARGS {
+    when /^:i i/ { ++$inst }
+    default {
+        note "FATAL: Unknown arg '$_'";
+        exit;
+    }
+}
+
 
