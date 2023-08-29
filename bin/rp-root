@@ -3,8 +3,8 @@
 use lib <../lib>;
 use RakudoPkgHelper;
 
-my $user = $*USER;
-note "DEBUG user = $user";
+my $user    = $*USER;
+my $is-root = $user eq 'root' ?? True !! False;
 
 if not @*ARGS {
     say qq:to/HERE/;
