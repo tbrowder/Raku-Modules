@@ -1,0 +1,16 @@
+#!/opt/rakudo-pkg/bin/raku
+
+use lib <../lib>;
+use RakudoPkgHelper;
+
+my $usr = $*USER;
+note "DEBUG user = $user";
+
+if not @*ARGS {
+    say qq:to/HERE/;
+    Usage: {$*PROGRAM.basename} go
+
+    HERE
+    exit
+}
+

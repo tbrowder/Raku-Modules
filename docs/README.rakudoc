@@ -14,7 +14,12 @@ use RakudoPkgHelper;
 
 =head1 DESCRIPTION
 
-B<RakudoPkgHelper> is ...
+B<RakudoPkgHelper> is a Raku module with one script for the root user to bootstrap the 'rakudo-pkg'
+installation on a rudumentary 'rakudo' package installation.
+After successful bootstrapping, the 'rakudo' package should be deleted.
+
+
+
 
 =head1 AUTHOR
 
