@@ -18,19 +18,40 @@ B<RakudoPkgHelper> is a Raku module with one script for the root user to bootstr
 installation on a rudumentary 'rakudo' package installation.
 After successful bootstrapping, the 'rakudo' package should be deleted.
 
+Note this package is designed for the purpose of standardizing multi-user Linux hosts
+for classrooms or computer laboratories.
+
 =head2 Procedures
 
 =head3 Assure you have the prerequisites for the use case
 
-=item The C</opt/rakudo-pkg> directory does not exist.
-=item The root user has no existing .raku, .zef, or zef directories.
-=item No normal users have any existing .raku, .zef, or zef directories.
+=begin item 
+The C</opt/rakudo-pkg> directory does not exist.
+
+=code $ sudo rm -rf /opt/rakudo-pkg
+=end item
+
+=begin item 
+The root user has no existing .raku, .zef, or zef directories.
+
+=code $ sudo -i; cd root; rm -rf .raku .zef zef
+=end item
+
+
+=begin item 
+No normal users have any existing .raku, .zef, or zef directories.
+
+=code $ cd; rm -rf .raku .zef zef
+=end item
+
 
 =head3 Install the Debian C<rakudo> package
 
 =begin code
 $ sudo apt-get install rakudo
 =end code
+
+We use the distro's version to 'bootstrap' our desired Rakudo framework.
 
 =head3 Install the C<rakudo-pkg> framework
 
@@ -43,7 +64,7 @@ The command does the following:
 =item deletes any existing /opt/rakudo-pkg directory
 =item deletes any existing .raku, .zef, or zef directories for root.
 =item installs the rakudo-pkg framework
-=item installs the new raku package
+=item installs the new rakudo package
 =item removes the system rakudo package
 =item installs and updates zef for root
 
