@@ -20,6 +20,12 @@ After successful bootstrapping, the 'rakudo' package should be deleted.
 
 =head2 Procedures
 
+=head3 Assure you have the prerequisites for the use case
+
+=item The C</opt/rakudo-pkg> directory does not exist.
+=item The root user has no existing .raku, .zef, or zef directories.
+=item No normal users have any existing .raku, .zef, or zef directories.
+
 =head3 Install the Debian C<rakudo> package
 
 =begin code
@@ -35,6 +41,7 @@ $ sudo rp-root install
 The command does the following:
 
 =item deletes any existing /opt/rakudo-pkg directory
+=item deletes any existing .raku, .zef, or zef directories for root.
 =item installs the rakudo-pkg framework
 =item installs the new raku package
 =item removes the system rakudo package
@@ -48,7 +55,8 @@ $ rp-user install
 
 The command does the following:
 
-=item
+=item deletes any existing .raku, .zef, or zef directories for the user.
+=item installs and updates zef for the user.
 
 =head1 AUTHOR
 
