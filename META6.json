@@ -15,6 +15,7 @@
     "RakudoPkgHelper": "lib/RakudoPkgHelper.rakumod"
   },
   "resources": [
+    "files/modules.txt"
   ],
   "source-url": "https://github.com/tbrowder/RakudoPkgHelper.git",
   "tags": [
