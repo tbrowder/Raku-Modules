@@ -1,21 +1,21 @@
-[![Actions Status](https://github.com/tbrowder/RakudoPkgHelper/actions/workflows/linux.yml/badge.svg)](https://github.com/tbrowder/RakudoPkgHelper/actions) [![Actions Status](https://github.com/tbrowder/RakudoPkgHelper/actions/workflows/macos.yml/badge.svg)](https://github.com/tbrowder/RakudoPkgHelper/actions) [![Actions Status](https://github.com/tbrowder/RakudoPkgHelper/actions/workflows/windows.yml/badge.svg)](https://github.com/tbrowder/RakudoPkgHelper/actions)
+[![Actions Status](https://github.com/tbrowder/RakudoPkg/actions/workflows/linux.yml/badge.svg)](https://github.com/tbrowder/RakudoPkg/actions) [![Actions Status](https://github.com/tbrowder/RakudoPkg/actions/workflows/macos.yml/badge.svg)](https://github.com/tbrowder/RakudoPkg/actions) [![Actions Status](https://github.com/tbrowder/RakudoPkg/actions/workflows/windows.yml/badge.svg)](https://github.com/tbrowder/RakudoPkg/actions)
 
 NAME
 ====
 
-**RakudoPkgHelper** - Provides tools for easing use of the 'rakudo-pkg' system for Debian and Ubuntu
+**RakudoPkg** - Provides tools for easing use of the 'rakudo-pkg' system for Debian and Ubuntu
 
 SYNOPSIS
 ========
 
 ```raku
-use RakudoPkgHelper;
+use RakudoPkg;
 ```
 
 DESCRIPTION
 ===========
 
-**RakudoPkgHelper** is a Raku module with one script for the root user to bootstrap the 'rakudo-pkg' installation on a rudumentary 'rakudo' package installation. After successful bootstrapping, the 'rakudo' package should be deleted.
+**RakudoPkg** is a Raku module with one script for the root user to bootstrap the 'rakudo-pkg' installation on a rudumentary 'rakudo' package installation. After successful bootstrapping, the 'rakudo' package should be deleted.
 
 Note this package is designed for the purpose of standardizing multi-user Linux hosts for classrooms or computer laboratories.
 
@@ -36,7 +36,7 @@ Procedures
 
         $ cd; rm -rf .raku .zef zef
 
-### Install the Debian `rakudo` package
+### Install the Debian or Ubuntu `rakudo` package
 
     $ sudo apt-get install rakudo
 
@@ -59,6 +59,10 @@ The command does the following:
   * removes the system rakudo package
 
   * installs and updates zef for root
+
+### Install a curated set of modules for public use
+
+A list of modules the author uses is in `%?RESOURCES`, but another list may be provided if desired. The input list must be is a text file with one module name per line (along with any adverbs desired).
 
 ### Install zef for a user
 

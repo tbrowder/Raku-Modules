@@ -9,10 +9,10 @@
   ],
   "description": "Provides tools for easing use of the 'rakudo-pkg' system for Debian and Ubuntu",
   "license": "Artistic-2.0",
-  "name": "RakudoPkgHelper",
+  "name": "RakudoPkg",
   "perl": "6.d",
   "provides": {
-    "RakudoPkgHelper": "lib/RakudoPkgHelper.rakumod"
+    "RakudoPkg": "lib/RakudoPkg.rakumod"
   },
   "resources": [
     "files/modules.txt"
