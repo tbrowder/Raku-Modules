@@ -2,19 +2,19 @@
 
 =head1 NAME
 
-B<RakudoPkgHelper> - Provides tools for easing use of the 'rakudo-pkg' system for Debian and Ubuntu
+B<RakudoPkg> - Provides tools for easing use of the 'rakudo-pkg' system for Debian and Ubuntu
 
 =head1 SYNOPSIS
 
 =begin code :lang<raku>
 
-use RakudoPkgHelper;
+use RakudoPkg;
 
 =end code
 
 =head1 DESCRIPTION
 
-B<RakudoPkgHelper> is a Raku module with one script for the root user to bootstrap the 'rakudo-pkg'
+B<RakudoPkg> is a Raku module with one script for the root user to bootstrap the 'rakudo-pkg'
 installation on a rudumentary 'rakudo' package installation.
 After successful bootstrapping, the 'rakudo' package should be deleted.
 

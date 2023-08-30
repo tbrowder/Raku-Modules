@@ -1,5 +1,5 @@
 use Test;
-use RakudoPkgHelper;
+use RakudoPkg;
 
 pass "replace me";
 
