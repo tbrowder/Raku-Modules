@@ -45,7 +45,7 @@ No normal users have any existing .raku, .zef, or zef directories.
 =end item
 
 
-=head3 Install the Debian C<rakudo> package
+=head3 Install the Debian or Ubuntu C<rakudo> package
 
 =begin code
 $ sudo apt-get install rakudo
@@ -67,6 +67,12 @@ The command does the following:
 =item installs the new rakudo package
 =item removes the system rakudo package
 =item installs and updates zef for root
+
+=head3 Install a curated set of modules for public use
+
+A list of modules the author uses is in C<%?RESOURCES>, but another
+list may be provided if desired. The input list must be is a text file with one
+module name per line (along with any adverbs desired).
 
 =head3 Install zef for a user
 

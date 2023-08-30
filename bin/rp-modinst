@@ -16,10 +16,8 @@ if not @*ARGS {
     exit
 }
 
-unless $is-root {
-    say "FATAL: This program must be executed by the root user.";
-    exit;
-}
+# this can be used by root or an ordinary user
+say "This is being executed by the '$user' user.";
 
 for @*ARGS {
     when /^:i i/ { ++$inst; }
