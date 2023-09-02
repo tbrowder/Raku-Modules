@@ -1,12 +1,12 @@
 use Test;
 use RakudoPkg;
 
-my $res  = my-resources;
-my $mfil = $res<files/modules.txt>.absolute;
-ok $mfil.IO.f;
-ok $mfil.IO.r;
+my $os = os-version;
+isa-ok, $os, OS;
 
-my $s = $mfil.IO.slurp;
-isa-ok $s, Str;
+my $osver = "{$os.version-number}.{$os.version-name}";
+
+is $os.name, $*DISTRO.name;
+is $osver, $*DISTRO.version;
 
 done-testing;
