@@ -8,8 +8,9 @@ class OS is export {
 
 sub os-version(--> OS) is export {
     my $name = $*DISTRO.name;
-    my $v    = $*DISTRO.version; # 11.buster
-    my ($version-number, $version-name) = $v.split('.');
+    my $v    = $*DISTRO.version.Str; # 11.buster
+
+    my ($version-number, $version-name) = $v.split(/\./);
     OS.new: :$name, :$version-name, :$version-number;
 }
 

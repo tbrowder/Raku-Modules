@@ -2,7 +2,7 @@ use Test;
 use RakudoPkg;
 
 my $os = os-version;
-isa-ok, $os, OS;
+isa-ok $os, OS;
 
 my $osver = "{$os.version-number}.{$os.version-name}";
 
