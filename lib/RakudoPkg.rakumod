@@ -31,6 +31,7 @@ class OS is export {
     has $.name;            # debian, xenial, ...
     has $.version-number;  # 10, 11, ...
     has $.version-name;    # buster, bookworm, ...
+    has $.version;         # 1.0.1.buster, bookworm, ...
 }
 
 sub os-version(--> OS) is export {
@@ -39,7 +40,8 @@ sub os-version(--> OS) is export {
 
     my $version-number = $v.parts[0];
     my $version-name   = $v.parts[1].lc;
-    OS.new: :$name, :$version-name, :$version-number;
+    my $version        = $v.Str;
+    OS.new: :$name, :$version-name, :$version-number, :$version;
 }
 
 sub my-resources is export {
