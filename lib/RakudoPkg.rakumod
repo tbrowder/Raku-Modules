@@ -1,29 +1,31 @@
 unit module  RakudoPkg;
 
 # Debian releases
-constant $DEBIAN = < 
-    4.etch.2007
-    5.lenny.2009
-    6.squeeze.2011
-    7.wheezy.2013
-    8.jessie.2015
-    9.stretch.2017
-   10.buster.2019
-   11.bullsye.2021
-   12.bookworm.2023
-   13.trixie.0
-   14.forky.0
-];
+our %debian-vnam is export = %(
+    etch => 4,
+    lenny => 5,
+    squeeze => 6,
+    wheezy => 7,
+    jessie => 8,
+    stretch => 9,
+    buster => 10,
+    bullsye => 11,
+    bookworm => 12,
+    trixie => 13,
+    forky => 14,
+);
+our %debian-vnum is export = %debian-vnam.invert;
 
 # Ubuntu releases
-constant $UBUNTU = <
-   14.trusty
-   16.xenial
-   18.bionic
-   20.focal
-   22.jammy
-   23.lunar
->;
+our %ubuntu-vnam is export = %(
+   trusty => 14,
+   xenial => 16,
+   bionic => 18,
+   focal => 20,
+   jammy => 22,
+   lunar => 23,
+);
+our %ubuntu-vnum is export = %ubuntu-vnam.invert;
 
 class OS is export {
     has $.name;            # debian, xenial, ...
@@ -32,11 +34,11 @@ class OS is export {
 }
 
 sub os-version(--> OS) is export {
-    my $name = $*DISTRO.name;
+    my $name = $*DISTRO.name.lc;
     my $v    = $*DISTRO.version; # a Version object: 11.buster
 
     my $version-number = $v.parts[0];
-    my $version-name   = $v.parts[1];
+    my $version-name   = $v.parts[1].lc;
     OS.new: :$name, :$version-name, :$version-number;
 }
 
@@ -44,4 +46,13 @@ sub my-resources is export {
     %?RESOURCES
 }
 
+sub is-debian(--> Bool) {
+    my $vnam = $*DISTRO.name.lc;
+    $vnam eq 'debian';
+}
+
+sub is-ubuntu(--> Bool) {
+    my $vnam = $*DISTRO.name.lc;
+    $vnam eq 'ubuntu';
+}
 
