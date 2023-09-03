@@ -2,7 +2,7 @@ use Test;
 use RakudoPkg;
 
 my $os = os-version;
-isa-ok $os, OS;
+isa-ok $os, OS, "native Version info: name '{$*DISTRO.name}', version '{$*DISTRO.version.Str}'";
 
 my $osver = "{$os.version-number}.{$os.version-name}";
 my $osversion = "{$os.version}";
