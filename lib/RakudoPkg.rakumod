@@ -30,9 +30,11 @@ our %ubuntu-vnum is export = %ubuntu-vnam.invert;
 =begin comment
 sytems confirmed
 ubuntu; 22.04.3.LTS.Jammy.Jellyfish
-macos;  12.6.7
-mswin32; 10.0.17763.52
 ubuntu; 20.04.6.LTS.Focal.Fossa 
+macos;  12.6.7
+macos;  13.5  
+macos;  11.7.8
+mswin32; 10.0.17763.52
 =end comment
 
 class OS is export {
