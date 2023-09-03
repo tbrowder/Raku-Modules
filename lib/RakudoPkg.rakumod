@@ -27,6 +27,14 @@ our %ubuntu-vnam is export = %(
 );
 our %ubuntu-vnum is export = %ubuntu-vnam.invert;
 
+=begin comment
+sytems confirmed
+ubuntu; 22.04.3.LTS.Jammy.Jellyfish
+macos;  12.6.7
+mswin32; 10.0.17763.52
+ubuntu; 20.04.6.LTS.Focal.Fossa 
+=end comment
+
 class OS is export {
     has $.name;            # debian, xenial, ...
     has $.version-number;  # 10, 11, ...
