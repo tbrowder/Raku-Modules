@@ -27,5 +27,6 @@ jobs:
       - name: Install App::Prove6
         run: zef install --/test App::Prove6
       - name: Run Tests
-        run: raku -I. t/*rakutest
-        run: prove6 -I. t
+        run: |
+            raku -I. t/*rakutest
+            prove6 -I. t
