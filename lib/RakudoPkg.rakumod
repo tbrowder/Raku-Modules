@@ -51,23 +51,63 @@ basically, two methods usable:
 =end comment
 
 class OS is export {
+    has $.name;              # debian, ubuntu, macos, mswin32, ...
     # the full Version string:
-    has $.version;         # 1.0.1.buster, bookworm, ...
-    # the number part
-    # the string part
+    has $.version;           # 1.0.1.buster, bookworm, ...
 
-    has $.name;            # debian, ubuntu, ...
+    # the number part
+    has $.version-number;    # 10, 11, 20.4, ...
+    # the string part
+    has $.version-name = ""; # buster, bookworm, xenial, ...
+
+    # for rakudo-pkg use
+    # valid for Debian and Ubuntu
     has $.keyring-location;
 
-    # valid for Debian and Ubuntu
-    has $.version-number;  # 10, 11, 20, ...
-    has $.version-name;    # buster, bookworm, xenial, ...
-
     submethod TWEAK {
+        # break version.parts into integer and string parts
+        my $s = "";
+        my $n = "";
+        for $!version.parts -> $p {
+            if $p ~~ Int {
+                $n ~= '.' if $n;
+                $n ~= $p;
+            }
+            elsif $p ~~ Str {
+                $s ~= ' ' if $p;
+                $s ~= $p;
+            }
+            else {
+                die "FATAL: Version part '$p' is not an Int nor a Str";
+            }
+        }
+        $!version-name   = $s.lc;
+        $!version-number = $n.Num;    # 10, 11, 20.4, ...
+
         # using info from rakudo-pkg, the keyring_location varies:
-        #   for Debian Stretch, Ubuntu 15.10 and earlier:
-        #   for later:
-    
+        #   for Debian Stretch, Ubuntu 16.04 and later:
+        #     /usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg
+        #   for Debian Jessie, Ubuntu 15.10 and earlier:
+        #     /etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg
+        if $name eq 'ubuntu' {
+            # need to know version number
+            if $!version-number >= 16.04 {
+                $.keyring-location = "/usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg";
+            }
+            else {
+                $.keyring-location = "/etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg";
+            }
+        }
+        elsif $name eq 'debian' {
+            # need to know version number of Stretch
+            my $dn = %debian-vnam<stretch>;
+            if $!version-number >= $dn {
+                $.keyring-location = "/usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg";
+            }
+            else {
+                $.keyring-location = "/etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg";
+            }
+        }
     }
 
 }
