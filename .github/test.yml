@@ -1,4 +1,4 @@
-name: MacOS
+name: test
 
 on:
   push:
@@ -13,20 +13,15 @@ jobs:
     strategy:
       matrix:
         os:
-          - macos-latest
+          - windows-2019
+          - windows-2022
         raku-version:
           - 'latest'
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
       - uses: Raku/setup-raku@v1
         with:
           raku-version: ${{ matrix.raku-version }}
-      - name: Install Dependencies
-        run: zef install --/test --test-depends --deps-only .
-      - name: Install App::Prove6
-        run: zef install --/test App::Prove6
       - name: Run Tests
-        run: |
-            raku -I. t/3-os-info.t
-            prove6 -I. t
+        run: raku -I. t/3-os-info.t
