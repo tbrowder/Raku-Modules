@@ -28,7 +28,8 @@ our %ubuntu-vnam is export = %(
 our %ubuntu-vnum is export = %ubuntu-vnam.invert;
 
 =begin comment
-sytems confirmed
+# sytems confirmed
+# name ; version
 ubuntu; 22.04.3.LTS.Jammy.Jellyfish
 ubuntu; 20.04.6.LTS.Focal.Fossa 
 macos;  12.6.7
@@ -37,11 +38,38 @@ macos;  11.7.8
 mswin32; 10.0.17763.52
 =end comment
 
+=begin comment
+from docs: var $*DISTRO
+from docs: role Version does Systemic
+
+basically, two methods usable:
+  .name
+  .version
+    .Str
+    .parts (a list of dot.separated items: integers, then strings)
+
+=end comment
+
 class OS is export {
-    has $.name;            # debian, xenial, ...
-    has $.version-number;  # 10, 11, ...
-    has $.version-name;    # buster, bookworm, ...
+    # the full Version string:
     has $.version;         # 1.0.1.buster, bookworm, ...
+    # the number part
+    # the string part
+
+    has $.name;            # debian, ubuntu, ...
+    has $.keyring-location;
+
+    # valid for Debian and Ubuntu
+    has $.version-number;  # 10, 11, 20, ...
+    has $.version-name;    # buster, bookworm, xenial, ...
+
+    submethod TWEAK {
+        # using info from rakudo-pkg, the keyring_location varies:
+        #   for Debian Stretch, Ubuntu 15.10 and earlier:
+        #   for later:
+    
+    }
+
 }
 
 sub os-version(--> OS) is export {
