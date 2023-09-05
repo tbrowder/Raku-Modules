@@ -51,24 +51,68 @@ basically, two methods usable:
 =end comment
 
 class OS is export {
+    # the two parts of the $*DISTRO object:
     has $.name;              # debian, ubuntu, macos, mswin32, ...
     # the full Version string:
     has $.version;           # 1.0.1.buster, bookworm, ...
 
+    # DERIVED PARTS
     # the number part
-    has $.version-number;    # 10, 11, 20.4, ...
+    has $.version-number = 0;    # 10, 11, 20.4, ...
     # the string part
-    has $.version-name = ""; # buster, bookworm, xenial, ...
+    has $.version-name = "(none)";      # buster, bookworm, xenial, ...
 
     # for rakudo-pkg use
     # valid for Debian and Ubuntu
-    has $.keyring-location;
+    has $.keyring-location = "N/A";
 
     submethod TWEAK {
+        # the two parts of the $*DISTRO object:
+        $!name    = $*DISTRO.name.lc;
+        $!version = $*DISTRO.version;
+
+        # what names does this module support?
+        unless $!name ~~ /:i debian | ubuntu/ {
+            die "FATAL: OS $!version-name is not supported. Please file an issue.";
+        }
+  
+        # other pieces needed for installation by rakudo-pkg
+        my $p = os-version-parts($!version.Str); # $n.Num;    # 10, 11, 20.4, ...
+        $!version-number = $p.key;
+        $!version-name   = $p.value; 
+
+        # using info from rakudo-pkg, the keyring_location varies:
+        #   for Debian Stretch, Ubuntu 16.04 and later:
+        #     /usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg
+        #   for Debian Jessie, Ubuntu 15.10 and earlier:
+        #     /etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg
+        if $!name eq 'ubuntu' {
+            # need to know version number
+            if $!version-number >= 16.04 {
+                $!keyring-location = "/usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg";
+            }
+            else {
+                $!keyring-location = "/etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg";
+            }
+        }
+        elsif $!name eq 'debian' {
+            # need to know version number of Stretch
+            my $dn = %debian-vnam<stretch>;
+            if $!version-number >= $dn {
+                $!keyring-location = "/usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg";
+            }
+            else {
+                $!keyring-location = "/etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg";
+            }
+        }
+    }
+
+    sub os-version-parts(Str $version --> Pair) is export {
         # break version.parts into integer and string parts
+        my @parts = $version.split('.');
         my $s = "";
         my $n = "";
-        for $!version.parts -> $p {
+        for @parts -> $p {
             if $p ~~ Int {
                 $n ~= '.' if $n;
                 $n ~= $p;
@@ -81,37 +125,14 @@ class OS is export {
                 die "FATAL: Version part '$p' is not an Int nor a Str";
             }
         }
-        $!version-name   = $s.lc;
-        $!version-number = $n.Num;    # 10, 11, 20.4, ...
-
-        # using info from rakudo-pkg, the keyring_location varies:
-        #   for Debian Stretch, Ubuntu 16.04 and later:
-        #     /usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg
-        #   for Debian Jessie, Ubuntu 15.10 and earlier:
-        #     /etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg
-        if $name eq 'ubuntu' {
-            # need to know version number
-            if $!version-number >= 16.04 {
-                $.keyring-location = "/usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg";
-            }
-            else {
-                $.keyring-location = "/etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg";
-            }
-        }
-        elsif $name eq 'debian' {
-            # need to know version number of Stretch
-            my $dn = %debian-vnam<stretch>;
-            if $!version-number >= $dn {
-                $.keyring-location = "/usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg";
-            }
-            else {
-                $.keyring-location = "/etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg";
-            }
-        }
+        my $vname   = $s.lc;
+        my $vnumber = $n.Num;    # 10, 11, 20.4, ...
+        Pair.new: $vnumber, $vname;
     }
-
 }
 
+=begin comment
+# shouldn't be needed now
 sub os-version(--> OS) is export {
     my $name = $*DISTRO.name.lc;
     my $v    = $*DISTRO.version; # a Version object: 11.buster
@@ -121,6 +142,7 @@ sub os-version(--> OS) is export {
     my $version        = $v.Str;
     OS.new: :$name, :$version-name, :$version-number, :$version;
 }
+=end comment
 
 sub my-resources is export {
     %?RESOURCES

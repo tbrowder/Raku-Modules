@@ -1,17 +1,14 @@
 use Test;
 use RakudoPkg;
 
-my $os = os-version;
-isa-ok $os, OS, "native Version info: name '{$*DISTRO.name}', version.Str '{$*DISTRO.version.Str}'";
-isa-ok $os, OS, "native Version info: version.parts '{$*DISTRO.version.parts.raku}'";
+my $os = OS.new; #os-version;
+isa-ok $os, OS, "native Version info: name '{$*DISTRO.name}', version '{$*DISTRO.version}'";
 
-=begin comment
-my $osver = "{$os.version-number}.{$os.version-name}";
-my $osversion = "{$os.version}";
+is $os.name, $*DISTRO.name, "my distro name '{$os.name}'";
+is $os.version, $*DISTRO.version, "my distro version '{$os.version}'";
+is $os.version.parts, $*DISTRO.version.parts, "my distro version.parts '{$os.version.parts}'";
 
-is $os.name, $*DISTRO.name, "my distro name {$os.name}";
-is $osver, $*DISTRO.version, "my distro version {$osver}";
-is $osversion, $*DISTRO.version.Str, "my distro version {$osversion}";
-=end comment
+# arbitrary parsing of the version string
+my $vs = "2.1.Some OS";
 
 done-testing;
