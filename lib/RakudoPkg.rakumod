@@ -58,9 +58,11 @@ class OS is export {
 
     # DERIVED PARTS
     # the number part
-    has $.version-number = 0;    # 10, 11, 20.4, ...
+    has $.version-number = "";    # 10, 11, 20.4, ...
     # the string part
-    has $.version-name = "(none)";      # buster, bookworm, xenial, ...
+    has $.version-name   = "";      # buster, bookworm, xenial, ...
+    # a numerical part for comparison between Ubuntu versions (x.y.z ==> x.y)
+    has $.num = 0;
 
     # for rakudo-pkg use
     # valid for Debian and Ubuntu
@@ -78,7 +80,9 @@ class OS is export {
   
         # other pieces needed for installation by rakudo-pkg
         my $p = os-version-parts($!version.Str); # $n.Num;    # 10, 11, 20.4, ...
-        $!version-number = $p.key;
+        $!version-number = $p.key; # we have to support multiple integer chunks for numerical comparison
+                                   # maybe a sort function
+                                   # maybe just the first two chunks only as an separate attr
         $!version-name   = $p.value; 
 
         # using info from rakudo-pkg, the keyring_location varies:
@@ -107,15 +111,16 @@ class OS is export {
         }
     }
 
-    sub os-version-parts(Str $version --> Pair) is export {
-        # break version.parts into integer and string parts
+    sub os-version-parts(Str $version --> List) is export { # break version.parts into integer and string parts
         my @parts = $version.split('.');
         my $s = "";
         my $n = "";
+        my @n;
         for @parts -> $p {
-            if $p ~~ /\d+/ { # Int {
+            if $p ~~ /^\d+$/ { # Int {
                 $n ~= '.' if $n;
                 $n ~= $p;
+                @n.push; $n;
             }
             elsif $p ~~ Str {
                 $s ~= ' ' if $s;
@@ -126,8 +131,8 @@ class OS is export {
             }
         }
         my $vname   = $s; # don't downcase here.lc;
-        my $vnumber = $n.Num;    # 10, 11, 20.4, ...
-        Pair.new: $vnumber, $vname;
+        my $vnumber = $n; #.Num;    # 10, 11, 20.4, ...
+        my $num = @n.elems > 1 ?? {@n[0] ~ '.' ~ @n[1]) !! @n.head;
     }
 }
 
