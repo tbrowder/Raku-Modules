@@ -73,7 +73,7 @@ class OS is export {
 
         # what names does this module support?
         unless $!name ~~ /:i debian | ubuntu/ {
-            die "FATAL: OS $!version-name is not supported. Please file an issue.";
+            note "WARNING: OS $!version-name is not supported. Please file an issue.";
         }
   
         # other pieces needed for installation by rakudo-pkg
