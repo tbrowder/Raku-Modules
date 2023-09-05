@@ -113,36 +113,23 @@ class OS is export {
         my $s = "";
         my $n = "";
         for @parts -> $p {
-            if $p ~~ Int {
+            if $p ~~ /\d+/ { # Int {
                 $n ~= '.' if $n;
                 $n ~= $p;
             }
             elsif $p ~~ Str {
-                $s ~= ' ' if $p;
+                $s ~= ' ' if $s;
                 $s ~= $p;
             }
             else {
                 die "FATAL: Version part '$p' is not an Int nor a Str";
             }
         }
-        my $vname   = $s.lc;
+        my $vname   = $s; # don't downcase here.lc;
         my $vnumber = $n.Num;    # 10, 11, 20.4, ...
         Pair.new: $vnumber, $vname;
     }
 }
-
-=begin comment
-# shouldn't be needed now
-sub os-version(--> OS) is export {
-    my $name = $*DISTRO.name.lc;
-    my $v    = $*DISTRO.version; # a Version object: 11.buster
-
-    my $version-number = $v.parts[0];
-    my $version-name   = $v.parts[1].lc;
-    my $version        = $v.Str;
-    OS.new: :$name, :$version-name, :$version-number, :$version;
-}
-=end comment
 
 sub my-resources is export {
     %?RESOURCES
