@@ -1,30 +1,6 @@
 use Test;
 use RakudoPkg;
 
-=begin comment
-# test for deb/ub keys
-if $!name eq 'ubuntu' {
-    # need to know version number
-    if $!version-number >= 16.04 {
-        $!keyring-location = "/usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg";
-    }
-    else {
-        $!keyring-location = "/etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg";
-    }
-}
-elsif $!name eq 'debian' {
-    # need to know version number of Stretch
-    my $dn = %debian-vnam<stretch>;
-    if $!version-number >= $dn {
-        $!keyring-location = "/usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg";
-    }
-    else {
-        $!keyring-location = "/etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg";
-    }
-}
-
-=end comment
-
 subtest {
     my $os = OS.new; #os-version;
     isa-ok $os, OS, "native Version info: name '{$*DISTRO.name}', version '{$*DISTRO.version}'";
@@ -33,15 +9,43 @@ subtest {
     is $os.version.parts, $*DISTRO.version.parts, "my distro version.parts '{$os.version.parts}'";
 }, "Testing class OS on native DISTRO object";
 
-# arbitrary parsing of the version string
+# parsing of an arbitrary version string
 #    sub os-version-parts(Str $version --> Hash) is export {
 subtest {
-    my $vs = "2.1.Some.OS";
+    my $vs = "2.1.20.Some.OS";
     my %h = os-version-parts $vs;
     isa-ok $vs, Str, "arbitrary version string '{$vs}'";
-    isa-ok %h<version-number>, Str, "arbitrary version num part string '{%h<version-number>}'";
+    isa-ok %h<version-serial>, Str, "arbitrary version num part string '{%h<version-serial>}'";
     isa-ok %h<version-name>, Str, "arbitrary version string part '{%h<version-name>}'";
     isa-ok %h<vnum>, Num, "version number for comparison '{%h<vnum>}'";
 }, "Testing parsing of an arbitrary version string";
+
+# parsing version strings from live data on Github workflows
+=begin comment
+# sytems confirmed
+# name ; version
+ubuntu; 22.04.3.LTS.Jammy.Jellyfish
+ubuntu; 20.04.6.LTS.Focal.Fossa 
+macos;  12.6.7
+macos;  13.5  
+macos;  11.7.8
+mswin32; 10.0.17763.52
+=end comment
+my @sys =
+"ubuntu; 22.04.3.LTS.Jammy.Jellyfish",
+"ubuntu; 20.04.6.LTS.Focal.Fossa",
+"macos;  12.6.7",
+"macos;  13.5",
+"macos;  11.7.8",
+"mswin32; 10.0.17763.52",
+;
+for @sys -> $s is copy {
+    say "System; $s";
+    $s ~~ s:g/\s//; # no spaces
+    my @w = $s.split(';');
+    say "  name/version string: {@w.raku}";
+}
+
+    
 
 done-testing;

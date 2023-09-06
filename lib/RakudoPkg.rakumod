@@ -1,4 +1,5 @@
 unit module  RakudoPkg;
+
 # Debian releases
 our %debian-vnam is export = %(
     etch => 4,
@@ -25,6 +26,12 @@ our %ubuntu-vnam is export = %(
    lunar => 23,
 );
 our %ubuntu-vnum is export = %ubuntu-vnam.invert;
+
+# key locations 
+# newest key
+constant $KEY1 is export = "/usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg";
+# key for older versions
+constant $KEY2 is export = "/etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg";
 
 =begin comment
 # sytems confirmed
@@ -56,15 +63,17 @@ class OS is export {
     has $.version;           # 1.0.1.buster, bookworm, ...
 
     # DERIVED PARTS
-    # the number part
-    has $.version-number = "";    # 10, 11, 20.4, ...
+    # the serial part
+    has $.version-serial = "";    # 10, 11, 20.4, ...
     # the string part
     has $.version-name   = "";      # buster, bookworm, xenial, ...
     # a numerical part for comparison between Ubuntu versions (x.y.z ==> x.y)
+    # also used for debian version comparisons
     has $.vnum = 0;
+
     # a hash to contain the parts
     # %h = %(
-    #     version-number => value,
+    #     version-serial => value,
     #     version-name   => value,
     #     vnum           => value,
     # )
@@ -85,50 +94,62 @@ class OS is export {
   
         # other pieces needed for installation by rakudo-pkg
         my %h = os-version-parts($!version.Str); # $n.Num;    # 10, 11, 20.4, ...
-        $!version-number = %h<version-number>; 
+        $!version-serial = %h<version-serial>; 
         $!version-name   = %h<version-name>; 
         # we have to support multiple integer chunks for numerical comparison
         $!vnum           = %h<vnum>; 
 
-        # using info from rakudo-pkg, the keyring_location varies:
-        #   for Debian Stretch, Ubuntu 16.04 and later:
-        #     /usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg
-        #   for Debian Jessie, Ubuntu 15.10 and earlier:
-        #     /etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg
-        if $!name eq 'ubuntu' {
-            # need to know version number
-            if $!vnum >= 16.04 {
-                $!keyring-location = "/usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg";
+        $!keyring-location = key-location($!name, $!vnum);
+    }
+
+    # using info from rakudo-pkg, the keyring_location varies:
+    #   for Debian Stretch, Ubuntu 16.04 and later:
+    #     /usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg
+    #   for Debian Jessie, Ubuntu 15.10 and earlier:
+    #     /etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg
+    sub key-location($name, Num $vnum --> Str) is export {
+        my $keyloc = "";
+        if $name eq 'ubuntu' {
+            # need to know numerical version number
+            if $vnum >= 16.04 {
+                $keyloc = $KEY1; #"/usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg";
             }
             else {
-                $!keyring-location = "/etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg";
+                $keyloc = $KEY2; #"/etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg";
             }
         }
-        elsif $!name eq 'debian' {
-            # need to know version number of Stretch
+        elsif $name eq 'debian' {
+            # need to know numerical version number of Stretch
             my $dn = %debian-vnam<stretch>;
-            if $!vnum >= $dn {
-                $!keyring-location = "/usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg";
+            if $vnum >= $dn {
+                $keyloc = $KEY1; #"/usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg";
             }
             else {
-                $!keyring-location = "/etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg";
+                $keyloc = $KEY2; #"/etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg";
             }
         }
+        $keyloc
     }
 
     sub os-version-parts(Str $version --> Hash) is export { 
-        # break version.parts into integer and string parts
+        # break version.parts into serial and string parts
+        # create a numerical part for serial comparison
         my @parts = $version.split('.');
-        my $s = "";
-        my $n = "";
-        my @n;
+        my $s = ""; # string part
+        my $n = ""; # serial part
+        my @c;      # numerical parts
         for @parts -> $p {
             if $p ~~ /^\d+$/ { # Int {
+                # assign to the serial part ($n, NOT a Num)
+                # separate parts with periods
                 $n ~= '.' if $n;
                 $n ~= $p;
-                @n.push: $p;
+                # save the integers for later use
+                @c.push: $p;
             }
             elsif $p ~~ Str {
+                # assign to the string part ($s)
+                # separate parts with spaces
                 $s ~= ' ' if $s;
                 $s ~= $p;
             }
@@ -137,17 +158,20 @@ class OS is export {
             }
         }
         my $vname   = $s; # don't downcase here.lc;
-        my $vnumber = $n; #.Num;    # 10, 11, 20.4, ...
-        if not @n.elems {
-            @n.push: 0;
-            $vnumber = 0;
+        my $vserial = $n; # 10, 11, 20.04.2, ...
+        if not @c.elems {
+            # not usual, but there is no serial part, so make it zero
+            @c.push: 0;
+            $vserial = 0;
         }
-        my $vnum = @n.elems > 1 ?? (@n[0] ~ '.' ~ @n[1]) !! @n.head;
+        # for numerical comparison
+        # only zero or one decimal places
+        my $vnum = @c.elems > 1 ?? (@c[0] ~ '.' ~ @c[1]) !! @c.head;
         # return the hash
         my %h = %(
-            version-number => $vnumber,
+            version-serial => $vserial,
             version-name   => $vname,
-            vnum           => $vnum.Num,
+            vnum           => $vnum.Num, # it MUST be a number
         );
         %h
     }
