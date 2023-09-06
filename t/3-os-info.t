@@ -1,6 +1,30 @@
 use Test;
 use RakudoPkg;
 
+=begin comment
+# test for deb/ub keys
+if $!name eq 'ubuntu' {
+    # need to know version number
+    if $!version-number >= 16.04 {
+        $!keyring-location = "/usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg";
+    }
+    else {
+        $!keyring-location = "/etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg";
+    }
+}
+elsif $!name eq 'debian' {
+    # need to know version number of Stretch
+    my $dn = %debian-vnam<stretch>;
+    if $!version-number >= $dn {
+        $!keyring-location = "/usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg";
+    }
+    else {
+        $!keyring-location = "/etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg";
+    }
+}
+
+=end comment
+
 subtest {
     my $os = OS.new; #os-version;
     isa-ok $os, OS, "native Version info: name '{$*DISTRO.name}', version '{$*DISTRO.version}'";
@@ -10,13 +34,14 @@ subtest {
 }, "Testing class OS on native DISTRO object";
 
 # arbitrary parsing of the version string
-#    sub os-version-parts(Str $version --> Pair) is export {
+#    sub os-version-parts(Str $version --> Hash) is export {
 subtest {
     my $vs = "2.1.Some.OS";
-    my $p = os-version-parts $vs; 
+    my %h = os-version-parts $vs;
     isa-ok $vs, Str, "arbitrary version string '{$vs}'";
-    isa-ok $p.key, Num, "arbitrary version num part string '{$p.key}'";
-    isa-ok $p.value, Str, "arbitrary version string part '{$p.value}'";
+    isa-ok %h<version-number>, Str, "arbitrary version num part string '{%h<version-number>}'";
+    isa-ok %h<version-string>, Str, "arbitrary version string part '{%h<version-string>}'";
+    isa-ok %h<num>, Num, "version number for comparison '{%h<num>}'";
 }, "Testing parsing of an arbitrary version string";
 
 done-testing;

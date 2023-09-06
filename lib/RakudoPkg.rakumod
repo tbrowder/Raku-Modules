@@ -1,5 +1,4 @@
 unit module  RakudoPkg;
-
 # Debian releases
 our %debian-vnam is export = %(
     etch => 4,
@@ -62,11 +61,17 @@ class OS is export {
     # the string part
     has $.version-name   = "";      # buster, bookworm, xenial, ...
     # a numerical part for comparison between Ubuntu versions (x.y.z ==> x.y)
-    has $.num = 0;
+    has $.vnum = 0;
+    # a hash to contain the parts
+    # %h = %(
+    #     version-number => value,
+    #     version-name   => value,
+    #     vnum           => value,
+    # )
 
     # for rakudo-pkg use
     # valid for Debian and Ubuntu
-    has $.keyring-location = "N/A";
+    has $.keyring-location = "";
 
     submethod TWEAK {
         # the two parts of the $*DISTRO object:
@@ -79,11 +84,11 @@ class OS is export {
         }
   
         # other pieces needed for installation by rakudo-pkg
-        my $p = os-version-parts($!version.Str); # $n.Num;    # 10, 11, 20.4, ...
-        $!version-number = $p.key; # we have to support multiple integer chunks for numerical comparison
-                                   # maybe a sort function
-                                   # maybe just the first two chunks only as an separate attr
-        $!version-name   = $p.value; 
+        my %h = os-version-parts($!version.Str); # $n.Num;    # 10, 11, 20.4, ...
+        $!version-number = %h<version-number>; 
+        $!version-name   = %h<version-name>; 
+        # we have to support multiple integer chunks for numerical comparison
+        $!vnum           = %h<vnum>; 
 
         # using info from rakudo-pkg, the keyring_location varies:
         #   for Debian Stretch, Ubuntu 16.04 and later:
@@ -111,7 +116,8 @@ class OS is export {
         }
     }
 
-    sub os-version-parts(Str $version --> List) is export { # break version.parts into integer and string parts
+    sub os-version-parts(Str $version --> Hash) is export { 
+        # break version.parts into integer and string parts
         my @parts = $version.split('.');
         my $s = "";
         my $n = "";
@@ -120,7 +126,7 @@ class OS is export {
             if $p ~~ /^\d+$/ { # Int {
                 $n ~= '.' if $n;
                 $n ~= $p;
-                @n.push; $n;
+                @n.push: $p;
             }
             elsif $p ~~ Str {
                 $s ~= ' ' if $s;
@@ -132,7 +138,18 @@ class OS is export {
         }
         my $vname   = $s; # don't downcase here.lc;
         my $vnumber = $n; #.Num;    # 10, 11, 20.4, ...
-        my $num = @n.elems > 1 ?? {@n[0] ~ '.' ~ @n[1]) !! @n.head;
+        if not @n.elems {
+            @n.push: 0;
+            $vnumber = 0;
+        }
+        my $num = @n.elems > 1 ?? (@n[0] ~ '.' ~ @n[1]) !! @n.head;
+        # return the hash
+        my %h = %(
+            version-number => $vnumber,
+            version-name   => $vname,
+            num            => $num.Num,
+        );
+        %h
     }
 }
 
