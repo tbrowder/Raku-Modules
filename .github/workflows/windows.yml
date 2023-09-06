@@ -29,3 +29,4 @@ jobs:
             raku -I. t/1-basic.t
             raku -I. t/2-module-list.t
             raku -I. t/3-os-info.t
+            for f in t/*t; do raku -I. $f; done
