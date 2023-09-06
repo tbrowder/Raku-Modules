@@ -142,12 +142,12 @@ class OS is export {
             @n.push: 0;
             $vnumber = 0;
         }
-        my $num = @n.elems > 1 ?? (@n[0] ~ '.' ~ @n[1]) !! @n.head;
+        my $vnum = @n.elems > 1 ?? (@n[0] ~ '.' ~ @n[1]) !! @n.head;
         # return the hash
         my %h = %(
             version-number => $vnumber,
             version-name   => $vname,
-            num            => $num.Num,
+            vnum           => $vnum.Num,
         );
         %h
     }
