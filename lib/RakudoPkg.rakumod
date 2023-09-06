@@ -97,7 +97,7 @@ class OS is export {
         #     /etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg
         if $!name eq 'ubuntu' {
             # need to know version number
-            if $!version-number >= 16.04 {
+            if $!vnum >= 16.04 {
                 $!keyring-location = "/usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg";
             }
             else {
@@ -107,7 +107,7 @@ class OS is export {
         elsif $!name eq 'debian' {
             # need to know version number of Stretch
             my $dn = %debian-vnam<stretch>;
-            if $!version-number >= $dn {
+            if $!vnum >= $dn {
                 $!keyring-location = "/usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg";
             }
             else {
