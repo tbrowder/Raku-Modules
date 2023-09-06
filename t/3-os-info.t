@@ -40,7 +40,7 @@ subtest {
     my %h = os-version-parts $vs;
     isa-ok $vs, Str, "arbitrary version string '{$vs}'";
     isa-ok %h<version-number>, Str, "arbitrary version num part string '{%h<version-number>}'";
-    isa-ok %h<version-string>, Str, "arbitrary version string part '{%h<version-string>}'";
+    isa-ok %h<version-name>, Str, "arbitrary version string part '{%h<version-name>}'";
     isa-ok %h<num>, Num, "version number for comparison '{%h<num>}'";
 }, "Testing parsing of an arbitrary version string";
 
