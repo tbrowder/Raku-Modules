@@ -113,8 +113,8 @@ class OS is export {
     #     /usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg
     #   for Debian Jessie, Ubuntu 15.10 and earlier:
     #     /etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg
-    sub key-location($name, Num $vnum --> Str) is export {
-        my $keyloc = "";
+    sub key-location($name, Num $vnum) is export {
+        my $keyloc = "N/A";
         if $name eq 'ubuntu' {
             # need to know numerical version number
             if $vnum >= 16.04 {
