@@ -1,7 +1,7 @@
 unit module  RakudoPkg;
 
 # Debian releases
-our %debian-vnam is export = %(
+our %debian-vnames is export = %(
     etch => 4,
     lenny => 5,
     squeeze => 6,
@@ -14,10 +14,10 @@ our %debian-vnam is export = %(
     trixie => 13,
     forky => 14,
 );
-our %debian-vnum is export = %debian-vnam.invert;
+our %debian-vnum is export = %debian-vnames.invert;
 
 # Ubuntu releases
-our %ubuntu-vnam is export = %(
+our %ubuntu-vnames is export = %(
    trusty => 14,
    xenial => 16,
    bionic => 18,
@@ -25,7 +25,7 @@ our %ubuntu-vnam is export = %(
    jammy => 22,
    lunar => 23,
 );
-our %ubuntu-vnum is export = %ubuntu-vnam.invert;
+our %ubuntu-vnum is export = %ubuntu-vnames.invert;
 
 # key locations 
 # newest key
@@ -69,12 +69,14 @@ class OS is export {
     has $.version-name   = "";      # buster, bookworm, xenial, ...
     # a numerical part for comparison between Ubuntu versions (x.y.z ==> x.y)
     # also used for debian version comparisons
-    has $.vnum = 0;
+    has $.vshort-name    = "";
+    has $.vnum           = 0;
 
     # a hash to contain the parts
     # %h = %(
     #     version-serial => value,
     #     version-name   => value,
+    #     vshort-name    => value,
     #     vnum           => value,
     # )
 
@@ -83,13 +85,16 @@ class OS is export {
     has $.keyring-location = "";
 
     submethod TWEAK {
-        # the two parts of the $*DISTRO object:
-        $!name    = $*DISTRO.name.lc;
-        $!version = $*DISTRO.version;
+        # TWO METHODS TO INITIATE
+        unless $!name.defined and $!version.defined {
+            # the two parts of the $*DISTRO object:
+            $!name    = $*DISTRO.name.lc;
+            $!version = $*DISTRO.version;
+        }
 
         # what names does this module support?
         unless $!name ~~ /:i debian | ubuntu/ {
-            note "WARNING: OS $!version-name is not supported. Please file an issue.";
+            note "WARNING: OS $!name is not supported. Please file an issue.";
         }
   
         # other pieces needed for installation by rakudo-pkg
@@ -97,6 +102,7 @@ class OS is export {
         $!version-serial = %h<version-serial>; 
         $!version-name   = %h<version-name>; 
         # we have to support multiple integer chunks for numerical comparison
+        $!vshort-name    = %h<vshort-name>; 
         $!vnum           = %h<vnum>; 
 
         $!keyring-location = key-location($!name, $!vnum);
@@ -120,7 +126,7 @@ class OS is export {
         }
         elsif $name eq 'debian' {
             # need to know numerical version number of Stretch
-            my $dn = %debian-vnam<stretch>;
+            my $dn = %debian-vnames<stretch>;
             if $vnum >= $dn {
                 $keyloc = $KEY1; #"/usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg";
             }
@@ -158,19 +164,33 @@ class OS is export {
             }
         }
         my $vname   = $s; # don't downcase here.lc;
+        # extract the short name
+        my $vshort = $vname.lc;
+        if $vshort {
+            $vshort ~~ s:i/lts//;
+            $vshort = $vshort.words.head;
+        }
+        
         my $vserial = $n; # 10, 11, 20.04.2, ...
         if not @c.elems {
             # not usual, but there is no serial part, so make it zero
             @c.push: 0;
             $vserial = 0;
         }
+
         # for numerical comparison
-        # only zero or one decimal places
+        # use the first two parts as is, for now add any third part to the
+        # second by concatenation 
         my $vnum = @c.elems > 1 ?? (@c[0] ~ '.' ~ @c[1]) !! @c.head;
+        if @c.elems > 2 {
+            $vnum ~= @c[2];
+        }
+
         # return the hash
         my %h = %(
             version-serial => $vserial,
             version-name   => $vname,
+            vshort-name    => $vshort.lc,
             vnum           => $vnum.Num, # it MUST be a number
         );
         %h
