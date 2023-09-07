@@ -1,4 +1,4 @@
-[![Actions Status](https://github.com/tbrowder/RakudoPkg/actions/workflows/linux.yml/badge.svg)](https://github.com/tbrowder/RakudoPkg/actions) [![Actions Status](https://github.com/tbrowder/RakudoPkg/actions/workflows/macos.yml/badge.svg)](https://github.com/tbrowder/RakudoPkg/actions) [![Actions Status](https://github.com/tbrowder/RakudoPkg/actions/workflows/windows.yml/badge.svg)](https://github.com/tbrowder/RakudoPkg/actions)
+[![Actions Status](https://github.com/tbrowder/RakudoPkg/actions/workflows/test.yml/badge.svg)](https://github.com/tbrowder/RakudoPkg/actions)
 
 NAME
 ====
@@ -15,7 +15,7 @@ use RakudoPkg;
 DESCRIPTION
 ===========
 
-**RakudoPkg** is a Raku module with one script for the root user to bootstrap the 'rakudo-pkg' installation on a rudumentary 'rakudo' package installation. After successful bootstrapping, the 'rakudo' package should be deleted.
+**RakudoPkg** is a Raku module with one script for the root user to bootstrap the 'rakudo-pkg' installation on a rudumentary 'rakudo' package installation. After successful bootstrapping, the system's 'rakudo' package should be deleted.
 
 Note this package is designed for the purpose of standardizing multi-user Linux hosts for classrooms or computer laboratories.
 
@@ -62,7 +62,7 @@ The command does the following:
 
 ### Install a curated set of modules for public use
 
-A list of modules the author uses is in `%?RESOURCES`, but another list may be provided if desired. The input list must be is a text file with one module name per line (along with any adverbs desired).
+A list of modules the author uses is in `%?RESOURCES`, but another list may be provided if desired. The input list must be a text file with one module name per line (along with any adverbs desired).
 
 ### Install zef for a user
 
