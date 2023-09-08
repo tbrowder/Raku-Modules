@@ -1,7 +1,6 @@
 # antononcube
 echo "antononcube: 8 chars"
 raku -e 'say $_ for "somefile".IO.lines[^(*-3)]'
-echo
 
 # lizmat
 echo "lizmat: 10 chars:"
