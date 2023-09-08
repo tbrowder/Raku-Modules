@@ -6,7 +6,7 @@ use RakudoPkg;
 my $user    = $*USER.lc;
 my $is-root = $user eq 'root' ?? True !! False;
 my $host    = $*KERNEL.hostname;
-my $system  = $*KERNEL.hardware // "Unknown";
+my $system  = $*KERNEL.hardware // "Unknown system";
 my $distro  = $*DISTRO.name;
 my $version = $*DISTRO.version;
 
@@ -52,7 +52,16 @@ my $i-zef  = 0;
 my $debug  = 0;
 
 for @*ARGS {
-    #when /^:i i/ { ++$inst; }
+    # modes
+    when /^ i  / { ++$m-inst; $m-rm   = 0; }
+    when /^ rm / { ++$m-rm;   $m-inst = 0; }
+
+    # items
+    when /^ ra / { ++$i-rak; $i-zef = 0; }
+    when /^ z  / { ++$i-zef; $i-rak = 0; }
+    # options
+    when /^ d / { ++$debug }
+
     default {
         note "FATAL: Unknown arg '$_'";
         exit;
