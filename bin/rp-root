@@ -14,7 +14,7 @@ my $inst    = 0;
 my $minst   = 0;
 if not @*ARGS {
     say qq:to/HERE/;
-    Usage: {$*PROGRAM.basename} <mode> <item> [options]
+    Usage: {$*PROGRAM.basename} <install | remove> <raku | zef>
 
     This is a root-only program currently running on:
 
@@ -23,15 +23,6 @@ if not @*ARGS {
         Distro:  $distro
         Version: $version
         System:  $system
-
-    Modes:
-        install <item>
-        remove  <item>
-    Items:
-        raku
-        zef
-    Options:
-        debug
 
     HERE
     exit
@@ -68,4 +59,39 @@ for @*ARGS {
     }
 }
 
+sub handle-prompt(:$res) is export {
+    if $res ~~ /^:i y/ {
+        say "Proceeding...";
+    }
+    else {
+        say "Exiting...";
+        exit;
+    }
+}
+
+if $m-inst {
+    if $i-rak {
+        say "Installing rakudo-pkg in /opt...";
+        say "All publicly accessible modules will be removed...";
+        my $res = prompt "Continue (y/N)? ";
+        handle-prompt :$res;
+    }
+    elsif $i-zef {
+        say "Installing zef in {$*HOME}...";
+        my $res = prompt "Continue (y/N)? ";
+        handle-prompt :$res;
+    }
+}
+elsif $m-rm {
+    if $i-rak {
+        say "Removing rakudo-pkg from /opt...";
+        my $res = prompt "Continue (y/N)? ";
+        handle-prompt :$res;
+    }
+    elsif $i-zef {
+        say "Removing zef completely in {$*HOME}...";
+        my $res = prompt "Continue (y/N)? ";
+        handle-prompt :$res;
+    }
+}
 

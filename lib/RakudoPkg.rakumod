@@ -197,6 +197,25 @@ class OS is export {
     }
 }
 
+sub get-paths($dir = '.' --> Hash) is export {
+    my @todo = $dir.IO;
+    my @fils;
+    my @dirs;
+    while @todo {
+        for @todo.pop.dir -> $path {
+            if $path.d {
+                @todo.push: $path;
+                @dirs.push: $path;
+            }
+            else {
+                @fils.push: $path;
+            }
+        }
+    }
+    my %h = files => @fils, dirs => @dirs;
+    %h
+}
+ 
 sub my-resources is export {
     %?RESOURCES
 }
