@@ -75,11 +75,13 @@ if $m-inst {
         say "All publicly accessible modules will be removed...";
         my $res = prompt "Continue (y/N)? ";
         handle-prompt :$res;
+        install-raku
     }
     elsif $i-zef {
         say "Installing zef in {$*HOME}...";
         my $res = prompt "Continue (y/N)? ";
         handle-prompt :$res;
+        install-zef
     }
 }
 elsif $m-rm {
@@ -87,11 +89,22 @@ elsif $m-rm {
         say "Removing rakudo-pkg from /opt...";
         my $res = prompt "Continue (y/N)? ";
         handle-prompt :$res;
+        remove-raku
     }
     elsif $i-zef {
         say "Removing zef completely in {$*HOME}...";
         my $res = prompt "Continue (y/N)? ";
         handle-prompt :$res;
+        remove-zef
     }
+}
+
+sub remove-zef is export {
+}
+sub remove-raku is export {
+}
+sub install-zef is export {
+}
+sub install-raku is export {
 }
 
