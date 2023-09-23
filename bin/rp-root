@@ -45,7 +45,7 @@ my $debug  = 0;
 for @*ARGS {
     # modes
     when /^ i  / { ++$m-inst; $m-rm   = 0; }
-    when /^ rm / { ++$m-rm;   $m-inst = 0; }
+    when /^ re / { ++$m-rm;   $m-inst = 0; }
 
     # items
     when /^ ra / { ++$i-rak; $i-zef = 0; }
@@ -100,11 +100,15 @@ elsif $m-rm {
 }
 
 sub remove-zef is export {
+    say "DEBUG: sub 'remove-zef' is not yet usable...";
 }
 sub remove-raku is export {
+    say "DEBUG: sub 'remove-raku' is not yet usable...";
 }
 sub install-zef is export {
+    say "DEBUG: sub 'install-zef' is not yet usable...";
 }
 sub install-raku is export {
+    say "DEBUG: sub 'install-raku' is not yet usable...";
 }
 
