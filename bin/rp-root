@@ -146,6 +146,17 @@ sub install-raku is export {
     shell "apt-get update";
     shell "apt-get install rakudo-pkg";
     shell "apt-get remove rakudo -y";
+
+    =begin comment
+    # file: rakudo-pkg.sh
+    # To be run in /etc/profile.d/
+    RAKUDO_PATHS=/opt/rakudo-pkg/bin:/opt/rakudo-pkg/share/perl6/bin
+    if ! echo "$PATH" | /bin/grep -Eq "(^|:)$RAKUDO_PATHS($|:)" ; then
+        export PATH="$PATH:$RAKUDO_PATHS"
+    fi
+    =end comment
+
+    # take care of the PATH for all
     note "Installation of raku via rakudo-pkg is complete";
     note "Removal of OS package 'rakudo' is complete";
 }
@@ -165,6 +176,12 @@ sub remove-raku is export {
         shell "apt-get remove rakudo-pkg";
         shell "rm -rf $dir" if $dir.IO.d;
         say "Package '$pkg' and directory '$dir' have been removed."
+        # rm any rakudo-pkg.sh in /etc/profile.d
+        my $rfil = "/etc/profile.d/rakudo-pkg.sh";
+        if $rfil.IO.f {
+            shell "rm -f $rfil";
+            say "File '$rfil' has been removed."
+        }
     }
     else {
         say "Directory '$dir' does not exist!";
