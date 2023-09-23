@@ -145,7 +145,9 @@ sub install-raku is export {
     shell "curl -1sLf 'https://dl.cloudsmith.io/public/nxadm-pkgs/rakudo-pkg/config.deb.txt?distro={$os.name}&codename={$os.version-name}' > /etc/apt/sources.list.d/nxadm-pkgs-rakudo-pkg.list";
     shell "apt-get update";
     shell "apt-get install rakudo-pkg";
-    note "Installation of raku is complete";
+    shell "apt-get remove rakudo -y";
+    note "Installation of raku via rakudo-pkg is complete";
+    note "Removal of OS package 'rakudo' is complete";
 }
 
 sub remove-raku is export {
