@@ -104,20 +104,26 @@ sub install-raku is export {
     if $dir.IO.d {
        say qq:to/HERE/;
        Directory '$dir' already exists. It must be removed first
-       my the 'remove raku' mode.
+       by the 'remove raku' mode.
        HERE
     }
     else {
-       #say "Directory '$dir' does not exist!";
+       say "Directory '$dir' does not exist.";
     }
     my $os = OS.new;
-    say "OS = {$os.name}";
-    say "version = {$os.version}";
-    say "number = {$os.vnum}";
-    say "keyring location = {$os.keyring-location}";
-    say "DEBUG: sub 'install-raku' is not yet usable...";
-    say "       Exiting."; exit;
-    if not $os.is-debian {
+
+    if 1 {
+       print qq:to/HERE/;
+       DEBUG: sub 'install-raku' is not yet usable...
+       OS = {$os.name}
+       version = {$os.version}
+       number = {$os.vnum};
+       nxadm's keyring location = {$os.keyring-location}
+       HERE
+    }
+    #Exiting."; exit;
+
+    if $os.name !~~ /:i debian / {
         say "FATAL: Only Debian can be handled for now.";
         say "       File an issue if you want another distro.";
         say "       Exiting.";
@@ -125,11 +131,21 @@ sub install-raku is export {
     }
     say "Continuing...";
 
-    if $os.is-debian {
-        shell "apt-get install -y debian-keyring";  # debian only
+    if $os.name ~~ /:i debian / {
+        shell "apt-get install -y debian-keyring";          # debian only
         shell "apt-get install -y debian-archive-keyring";  # debian only
+    }
+    if $os.name ~~ /:i debian|ubuntu / {
         shell "apt-get install -y apt-transport-https";
     }
+
+    # only debian or ubuntu past here
+    shell "curl -1sLf 'https://dl.cloudsmith.io/public/nxadm-pkgs/rakudo-pkg/gpg.0DD4CA7EB1C6CC6B.key' |  gpg --dearmor >> {$os.keyring-location}";
+
+    shell "curl -1sLf 'https://dl.cloudsmith.io/public/nxadm-pkgs/rakudo-pkg/config.deb.txt?distro={$os.name}&codename={$os.version-name}' > /etc/apt/sources.list.d/nxadm-pkgs-rakudo-pkg.list";
+    shell "apt-get update";
+    shell "apt-get install rakudo-pkg";
+    note "Installation of raku is complete";
 }
 
 sub remove-raku is export {
