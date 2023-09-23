@@ -110,6 +110,9 @@ sub install-raku is export {
     else {
        #say "Directory '$dir' does not exist!";
     }
+    my $os = OS.new;
+    say "OS = {$os.name}";
+    say "version = {$os.version}";
     say "DEBUG: sub 'install-raku' is not yet usable...";
 }
 
