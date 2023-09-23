@@ -113,7 +113,23 @@ sub install-raku is export {
     my $os = OS.new;
     say "OS = {$os.name}";
     say "version = {$os.version}";
+    say "number = {$os.vnum}";
+    say "keyring location = {$os.keyring-location}";
     say "DEBUG: sub 'install-raku' is not yet usable...";
+    say "       Exiting."; exit;
+    if not $os.is-debian {
+        say "FATAL: Only Debian can be handled for now.";
+        say "       File an issue if you want another distro.";
+        say "       Exiting.";
+        exit;
+    }
+    say "Continuing...";
+
+    if $os.is-debian {
+        shell "apt-get install -y debian-keyring";  # debian only
+        shell "apt-get install -y debian-archive-keyring";  # debian only
+        shell "apt-get install -y apt-transport-https";
+    }
 }
 
 sub remove-raku is export {
