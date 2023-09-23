@@ -99,16 +99,44 @@ elsif $m-rm {
     }
 }
 
-sub remove-zef is export {
-    say "DEBUG: sub 'remove-zef' is not yet usable...";
+sub install-raku is export {
+    my $dir = "/opt/rakudo-pkg";
+    if $dir.IO.d {
+       say qq:to/HERE/;
+       Directory '$dir' already exists. It must be removed first
+       my the 'remove raku' mode.
+       HERE
+    }
+    else {
+       #say "Directory '$dir' does not exist!";
+    }
+    say "DEBUG: sub 'install-raku' is not yet usable...";
 }
+
 sub remove-raku is export {
-    say "DEBUG: sub 'remove-raku' is not yet usable...";
+    my $dir = "/opt/rakudo-pkg";
+    my $pkg = "rakudo-pkg";
+    if $dir.IO.d {
+        my $res = prompt "You really want to remove directory '$dir' (y/N)? ";
+        if $res ~~ /^:i y/ {
+            say "Proceeding...";
+        }
+        else {
+            say "Exiting...";
+            exit;
+        }
+        shell "apt-get remove rakudo-pkg";
+        shell "rm -rf $dir" if $dir.IO.d;
+        say "Package '$pkg' and directory '$dir' have been removed."
+    }
+    else {
+        say "Directory '$dir' does not exist!";
+    }
 }
 sub install-zef is export {
     say "DEBUG: sub 'install-zef' is not yet usable...";
 }
-sub install-raku is export {
-    say "DEBUG: sub 'install-raku' is not yet usable...";
+sub remove-zef is export {
+    say "DEBUG: sub 'remove-zef' is not yet usable...";
 }
 
