@@ -40,11 +40,8 @@ keyring_location=/usr/share/keyrings/nxadm-pkgs-rakudo-pkg-archive-keyring.gpg
 # keyring_location=/etc/apt/trusted.gpg.d/nxadm-pkgs-rakudo-pkg.gpg
 
 curl -1sLf 'https://dl.cloudsmith.io/public/nxadm-pkgs/rakudo-pkg/gpg.0DD4CA7EB1C6CC6B.key' |  gpg --dearmor >> ${keyring_location}
-
 curl -1sLf 'https://dl.cloudsmith.io/public/nxadm-pkgs/rakudo-pkg/config.deb.txt?distro=debian&codename=buster' > /etc/apt/sources.list.d/nxadm-pkgs-rakudo-pkg.list
-
 apt-get update
 apt-get install rakudo-pkg
-
 echo "Installation of raku is complete"
 
