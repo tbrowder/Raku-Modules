@@ -163,7 +163,7 @@ sub install-raku(:$debug) is export {
     note "Use this program to install 'zef'":
 }
 
-sub remove-raku is export {
+sub remove-raku() is export {
     my $dir = "/opt/rakudo-pkg";
     my $pkg = "rakudo-pkg";
     if $dir.IO.d {
@@ -189,10 +189,11 @@ sub remove-raku is export {
         say "Directory '$dir' does not exist!";
     }
 }
-sub install-zef is export {
+sub install-zef() is export {
+    #    shell "/opt/rakudo-pkg/bin/install-zef"; # for root or normal user
     say "DEBUG: sub 'install-zef' is not yet usable...";
 }
-sub remove-zef is export {
+sub remove-zef() is export {
     say "DEBUG: sub 'remove-zef' is not yet usable...";
 }
 
