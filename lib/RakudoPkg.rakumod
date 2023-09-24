@@ -230,3 +230,112 @@ sub is-ubuntu(--> Bool) {
     $vnam eq 'ubuntu';
 }
 
+sub handle-prompt(:$res) is export {
+    if $res ~~ /^:i y/ {
+        say "Proceeding...";
+    }
+    else {
+        say "Exiting...";
+        exit;
+    }
+}
+
+
+sub install-raku(:$debug) is export {
+    my $dir = "/opt/rakudo-pkg";
+    if $dir.IO.d {
+       say qq:to/HERE/;
+       Directory '$dir' already exists. It must be removed first
+       by the 'remove raku' mode.
+       HERE
+    }
+    else {
+       say "Directory '$dir' does not exist.";
+    }
+    my $os = OS.new;
+
+    if $debug {
+       print qq:to/HERE/;
+       DEBUG: sub 'install-raku' is not yet usable...
+       OS = {$os.name}
+       version = {$os.version}
+       number = {$os.vnum};
+       nxadm's keyring location = {$os.keyring-location}
+       HERE
+    }
+    #Exiting."; exit;
+
+    if $os.name !~~ /:i debian / {
+        say "FATAL: Only Debian can be handled for now.";
+        say "       File an issue if you want another distro.";
+        say "       Exiting.";
+        exit;
+    }
+    say "Continuing...";
+
+    if $os.name ~~ /:i debian / {
+        shell "apt-get install -y debian-keyring";          # debian only
+        shell "apt-get install -y debian-archive-keyring";  # debian only
+    }
+    if $os.name ~~ /:i debian|ubuntu / {
+        shell "apt-get install -y apt-transport-https";
+    }
+
+    # only debian or ubuntu past here
+    shell "curl -1sLf 'https://dl.cloudsmith.io/public/nxadm-pkgs/rakudo-pkg/gpg.0DD4CA7EB1C6CC6B.key' |  gpg --dearmor >> {$os.keyring-location}";
+
+    shell "curl -1sLf 'https://dl.cloudsmith.io/public/nxadm-pkgs/rakudo-pkg/config.deb.txt?distro={$os.name}&codename={$os.version-name}' > /etc/apt/sources.list.d/nxadm-pkgs-rakudo-pkg.list";
+    shell "apt-get update";
+    shell "apt-get install rakudo-pkg";
+    shell "apt-get remove rakudo -y";
+
+    =begin comment
+    # file: rakudo-pkg.sh
+    # To be run in /etc/profile.d/
+    RAKUDO_PATHS=/opt/rakudo-pkg/bin:/opt/rakudo-pkg/share/perl6/bin
+    if ! echo "$PATH" | /bin/grep -Eq "(^|:)$RAKUDO_PATHS($|:)" ; then
+        export PATH="$PATH:$RAKUDO_PATHS"
+    fi
+    =end comment
+
+    # take care of the PATH for all
+    note "Installation of raku via rakudo-pkg is complete";
+    note "Removal of OS package 'rakudo' is complete";
+    note "Log out and login to update your path for 'raku' to be found";
+    note "Use this program to install 'zef'":
+}
+
+sub remove-raku() is export {
+    my $dir = "/opt/rakudo-pkg";
+    my $pkg = "rakudo-pkg";
+    if $dir.IO.d {
+        my $res = prompt "You really want to remove directory '$dir' (y/N)? ";
+        if $res ~~ /^:i y/ {
+            say "Proceeding...";
+        }
+        else {
+            say "Exiting...";
+            exit;
+        }
+        shell "apt-get remove rakudo-pkg";
+        shell "rm -rf $dir" if $dir.IO.d;
+        say "Package '$pkg' and directory '$dir' have been removed.";
+        # rm any rakudo-pkg.sh in /etc/profile.d
+        my $rfil = "/etc/profile.d/rakudo-pkg.sh";
+        if $rfil.IO.f {
+            shell "rm -f $rfil";
+            say "File '$rfil' has been removed."
+        }
+    }
+    else {
+        say "Directory '$dir' does not exist!";
+    }
+}
+sub install-zef() is export {
+    #    shell "/opt/rakudo-pkg/bin/install-zef"; # for root or normal user
+    say "DEBUG: sub 'install-zef' is not yet usable...";
+}
+
+sub remove-zef() is export {
+    say "DEBUG: sub 'remove-zef' is not yet usable...";
+}
