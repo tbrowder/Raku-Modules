@@ -3,7 +3,7 @@
 my $usable = "/opt/rakudo-pkg/bin/raku".IO.e ?? True !! False;
 
 use lib <../lib>;
-use RakudoPkgHelper;
+use RakudoPkg;
 
 my $user    = $*USER;
 my $is-root = $user eq 'root' ?? True !! False;
@@ -16,6 +16,8 @@ my $inst    = 0;
 if not @*ARGS {
     say qq:to/HERE/;
     Usage: {$*PROGRAM.basename} install
+
+    Installs the Raku module installer 'zef' for a normal user.
 
     HERE
     exit
