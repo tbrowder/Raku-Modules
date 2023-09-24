@@ -240,6 +240,8 @@ sub handle-prompt(:$res) is export {
     }
 }
 
+sub set-sym-links(:$debug) is export {
+}
 
 sub install-raku(:$debug) is export {
     my $dir = "/opt/rakudo-pkg";
@@ -297,12 +299,27 @@ sub install-raku(:$debug) is export {
         export PATH="$PATH:$RAKUDO_PATHS"
     fi
     =end comment
+    =begin comment
+    # instead, try to symlink the paths to /usr/local/bin:
+    # but it may not work...
+    # collect the files in a hash
+    # delete those in the %ignore hash
+    my %ignore = set <
+        install-zef
+        rakudo-pkg_path.sh
+        fix-windows10
+        add-rakudo-to-path
+    >;
+    my $dir = "/opt/rakudo-pkg/bin";
+    my @fils = dir $dir;
+    say "  $_" for @fils;
 
     # take care of the PATH for all
-    note "Installation of raku via rakudo-pkg is complete";
-    note "Removal of OS package 'rakudo' is complete";
     note "Log out and login to update your path for 'raku' to be found";
     note "Use this program to install 'zef'":
+    note "Installation of raku via rakudo-pkg is complete";
+    note "Removal of OS package 'rakudo' is complete";
+    =end comment
 }
 
 sub remove-raku() is export {
