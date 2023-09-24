@@ -15,26 +15,14 @@ use RakudoPkg;
 DESCRIPTION
 ===========
 
-**RakudoPkg** is a Raku module with one script for the root user to bootstrap the 'rakudo-pkg' installation on a rudumentary 'rakudo' package installation. After successful bootstrapping, the system's 'rakudo' package should be deleted.
+**RakudoPkg** is a Raku module with one script for the root user to bootstrap the 'rakudo-pkg' installation by use of a rudumentary 'rakudo' package installation. After successful bootstrapping, the system's 'rakudo' package will be deleted.
 
 Note this package is designed for the purpose of standardizing multi-user Linux hosts for classrooms or computer laboratories.
 
 Procedures
 ----------
 
-### Assure you have the prerequisites for the use case
-
-  * The `/opt/rakudo-pkg` directory does not exist.
-
-        $ sudo rm -rf /opt/rakudo-pkg
-
-  * The root user has no existing .raku, .zef, or zef directories.
-
-        $ sudo -i; cd root; rm -rf .raku .zef zef
-
-  * No normal users have any existing .raku, .zef, or zef directories.
-
-        $ cd; rm -rf .raku .zef zef
+Normally you will be using this module on a system which has not had Raku installed other than with its normal package installation, but it can uninstall completely any previous such installations.
 
 ### Install the Debian or Ubuntu `rakudo` package
 
@@ -44,19 +32,25 @@ We use the distro's version to 'bootstrap' our desired Rakudo framework.
 
 ### Install the `rakudo-pkg` framework
 
-    $ sudo rp-root install
+    $ sudo rp-root install raku
 
 The command does the following:
 
   * deletes any existing /opt/rakudo-pkg directory
-
-  * deletes any existing .raku, .zef, or zef directories for root.
 
   * installs the rakudo-pkg framework
 
   * installs the new rakudo package
 
   * removes the system rakudo package
+
+### Install the `zef` module installer
+
+    $ sudo rp-root install zef
+
+The command does the following:
+
+  * deletes any existing .raku, .zef, or zef directories for root.
 
   * installs and updates zef for root
 
@@ -66,7 +60,7 @@ A list of modules the author uses is in `%?RESOURCES`, but another list may be p
 
 ### Install zef for a user
 
-    $ rp-user install
+    $ rp-user install zef
 
 The command does the following:
 

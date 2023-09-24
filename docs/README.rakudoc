@@ -15,35 +15,18 @@ use RakudoPkg;
 =head1 DESCRIPTION
 
 B<RakudoPkg> is a Raku module with one script for the root user to bootstrap the 'rakudo-pkg'
-installation on a rudumentary 'rakudo' package installation.
-After successful bootstrapping, the system's 'rakudo' package should be deleted.
+installation by use of a rudumentary 'rakudo' package installation.
+After successful bootstrapping, the system's 'rakudo' package will be deleted.
 
 Note this package is designed for the purpose of standardizing multi-user Linux hosts
 for classrooms or computer laboratories.
 
 =head2 Procedures
 
-=head3 Assure you have the prerequisites for the use case
-
-=begin item 
-The C</opt/rakudo-pkg> directory does not exist.
-
-=code $ sudo rm -rf /opt/rakudo-pkg
-=end item
-
-=begin item 
-The root user has no existing .raku, .zef, or zef directories.
-
-=code $ sudo -i; cd root; rm -rf .raku .zef zef
-=end item
-
-
-=begin item 
-No normal users have any existing .raku, .zef, or zef directories.
-
-=code $ cd; rm -rf .raku .zef zef
-=end item
-
+Normally you will be using this module on a system
+which has not had Raku installed other than with its normal
+package installation, but it can uninstall
+completely any previous such installations.
 
 =head3 Install the Debian or Ubuntu C<rakudo> package
 
@@ -56,16 +39,25 @@ We use the distro's version to 'bootstrap' our desired Rakudo framework.
 =head3 Install the C<rakudo-pkg> framework
 
 =begin code
-$ sudo rp-root install
+$ sudo rp-root install raku
 =end code
 
 The command does the following:
 
 =item deletes any existing /opt/rakudo-pkg directory
-=item deletes any existing .raku, .zef, or zef directories for root.
 =item installs the rakudo-pkg framework
 =item installs the new rakudo package
 =item removes the system rakudo package
+
+=head3 Install the C<zef> module installer
+
+=begin code
+$ sudo rp-root install zef
+=end code
+
+The command does the following:
+
+=item deletes any existing .raku, .zef, or zef directories for root.
 =item installs and updates zef for root
 
 =head3 Install a curated set of modules for public use
@@ -77,7 +69,7 @@ module name per line (along with any adverbs desired).
 =head3 Install zef for a user
 
 =begin code
-$ rp-user install
+$ rp-user install zef
 =end code
 
 The command does the following:
