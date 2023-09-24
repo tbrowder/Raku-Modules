@@ -1,6 +1,8 @@
 use Test;
 use RakudoPkg;
 
+my $debug = 0;
+
 create-test-dir;
 
 my $dirA = "./tmp/A";
@@ -39,6 +41,12 @@ sub create-test-dir {
    my $dirB = mkdir "./tmp/test-dir/dirB";
    copy $tfile-a, "$dirB/{$tfile-a.IO.basename}";
    copy $tfile-b, "$dirB/{$tfile-b.IO.basename}";
+}
+
+END {
+    unless $debug {
+        shell "rm -rf ./tmp";
+    }
 }
 
 done-testing;
