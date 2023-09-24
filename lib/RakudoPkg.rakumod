@@ -241,6 +241,34 @@ sub handle-prompt(:$res) is export {
 }
 
 sub set-sym-links(:$debug) is export {
+    # for now set just bin progs in /opt-rakudo-pkg/bin
+    # run this after installation is complete at
+    # the end of sub install-raku
+
+    =begin comment
+    # file: rakudo-pkg.sh
+    # To be run in /etc/profile.d/
+    RAKUDO_PATHS=/opt/rakudo-pkg/bin:/opt/rakudo-pkg/share/perl6/bin
+    if ! echo "$PATH" | /bin/grep -Eq "(^|:)$RAKUDO_PATHS($|:)" ; then
+        export PATH="$PATH:$RAKUDO_PATHS"
+    fi
+    =end comment
+    =begin comment
+    # instead, try to symlink the paths to /usr/local/bin:
+    # but it may not work...
+    # collect the files in a hash
+    # delete those in the %ignore hash
+    my %ignore = set <
+        install-zef
+        rakudo-pkg_path.sh
+        fix-windows10
+        add-rakudo-to-path
+    >;
+    my $dir = "/opt/rakudo-pkg/bin";
+    my @fils = dir $dir;
+    say "  $_" for @fils;
+    =end comment
+    
 }
 
 sub install-raku(:$debug) is export {
@@ -292,28 +320,7 @@ sub install-raku(:$debug) is export {
     shell "apt-get remove rakudo -y";
 
     =begin comment
-    # file: rakudo-pkg.sh
-    # To be run in /etc/profile.d/
-    RAKUDO_PATHS=/opt/rakudo-pkg/bin:/opt/rakudo-pkg/share/perl6/bin
-    if ! echo "$PATH" | /bin/grep -Eq "(^|:)$RAKUDO_PATHS($|:)" ; then
-        export PATH="$PATH:$RAKUDO_PATHS"
-    fi
-    =end comment
-    =begin comment
-    # instead, try to symlink the paths to /usr/local/bin:
-    # but it may not work...
-    # collect the files in a hash
-    # delete those in the %ignore hash
-    my %ignore = set <
-        install-zef
-        rakudo-pkg_path.sh
-        fix-windows10
-        add-rakudo-to-path
-    >;
-    my $dir = "/opt/rakudo-pkg/bin";
-    my @fils = dir $dir;
-    say "  $_" for @fils;
-
+    set-sym-links();
     # take care of the PATH for all
     note "Log out and login to update your path for 'raku' to be found";
     note "Use this program to install 'zef'":
@@ -348,6 +355,7 @@ sub remove-raku() is export {
         say "Directory '$dir' does not exist!";
     }
 }
+
 sub install-zef() is export {
     #    shell "/opt/rakudo-pkg/bin/install-zef"; # for root or normal user
     say "DEBUG: sub 'install-zef' is not yet usable...";
