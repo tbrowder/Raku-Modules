@@ -99,7 +99,7 @@ elsif $m-rm {
     }
 }
 
-sub install-raku is export {
+sub install-raku(:$debug) is export {
     my $dir = "/opt/rakudo-pkg";
     if $dir.IO.d {
        say qq:to/HERE/;
@@ -112,7 +112,7 @@ sub install-raku is export {
     }
     my $os = OS.new;
 
-    if 1 {
+    if $debug {
        print qq:to/HERE/;
        DEBUG: sub 'install-raku' is not yet usable...
        OS = {$os.name}
@@ -159,6 +159,8 @@ sub install-raku is export {
     # take care of the PATH for all
     note "Installation of raku via rakudo-pkg is complete";
     note "Removal of OS package 'rakudo' is complete";
+    note "Log out and login to update your path for 'raku' to be found";
+    note "Use this program to install 'zef'":
 }
 
 sub remove-raku is export {
