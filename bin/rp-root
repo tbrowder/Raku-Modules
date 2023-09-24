@@ -175,7 +175,7 @@ sub remove-raku is export {
         }
         shell "apt-get remove rakudo-pkg";
         shell "rm -rf $dir" if $dir.IO.d;
-        say "Package '$pkg' and directory '$dir' have been removed."
+        say "Package '$pkg' and directory '$dir' have been removed.";
         # rm any rakudo-pkg.sh in /etc/profile.d
         my $rfil = "/etc/profile.d/rakudo-pkg.sh";
         if $rfil.IO.f {
