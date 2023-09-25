@@ -28,8 +28,9 @@ if not @*ARGS {
     exit
 }
 
-manage-symlinks();
-manage-symlinks(:delete);
+my $f = "/some/file";
+my $bu = get-backup-name($f);
+say $bu;
 say "DEBUG exit"; exit;
 
 unless $is-root {

@@ -198,6 +198,8 @@ class OS is export {
 }
 
 sub get-paths($dir = '.' --> Hash) is export {
+    # Given any directory, recursively collect all files
+    # and directories below it
     my @todo = $dir.IO;
     my @fils;
     my @dirs;
@@ -241,6 +243,8 @@ sub handle-prompt(:$res) is export {
 }
 
 sub manage-symlinks(:$delete, :$debug) is export {
+    note "WARNING: this sub is no longer used";
+    return;
     # for now set just bin progs in /opt-rakudo-pkg/bin
     # run this after installation is complete at
     # the end of sub install-raku
@@ -364,7 +368,7 @@ sub remove-raku() is export {
         }
 
         # first remove any symlinks to avoid dangling links
-        manage-symlinks :delete;
+        # DO NOT USE manage-symlinks :delete;
 
         shell "apt-get remove rakudo-pkg";
         shell "rm -rf $dir" if $dir.IO.d;
@@ -389,3 +393,36 @@ sub install-zef() is export {
 sub remove-zef() is export {
     say "DEBUG: sub 'remove-zef' is not yet usable...";
 }
+
+sub install-path(:$user, :$debug) is export {
+    my $home = "/home/$user";
+
+    # Files needing changing or updating on Debian for Bash users:
+    # 
+    # For all users:
+    my $d1 = "/etc/bash.bashrc";
+    my $d2 = "/etc/profile";
+    # Particular users:
+    my $d3 = "{$home}/.bashrc";
+    my $d4 = "{$home}/.profile";
+    my $d5 = "{$home}/.bash_aliases";
+    my $d6 = "{$home}/.xsessionrc";
+
+    
+    
+}
+
+sub get-backup-name($f --> Str) is export {
+    # Given a file name, return a backup name consistinh
+    # of the original name with a ".YYYY-MM-DDThh:mm:ssZ";
+    my $dt = DateTime.now: :timezone(0);
+    my $y = sprintf "%02d", $dt.year;
+    my $M = sprintf "%02d", $dt.month;
+    my $d = sprintf "%02d", $dt.day;
+    my $h = sprintf "%02d", $dt.hour;
+    my $m = sprintf "%02d", $dt.minute;
+    my $s = sprintf "%02d", $dt.second;
+
+    my $b = "{$f}.{$y}-{$M}-{$d}T{$h}{$m}.{$s}Z";
+}
+
