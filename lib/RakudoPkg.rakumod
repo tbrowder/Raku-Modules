@@ -253,7 +253,7 @@ sub set-sym-links(:$debug) is export {
         export PATH="$PATH:$RAKUDO_PATHS"
     fi
     =end comment
-    =begin comment
+    #=begin comment
     # instead, try to symlink the paths to /usr/local/bin:
     # but it may not work...
     # collect the files in a hash
@@ -266,8 +266,21 @@ sub set-sym-links(:$debug) is export {
     >;
     my $dir = "/opt/rakudo-pkg/bin";
     my @fils = dir $dir;
-    say "  $_" for @fils;
-    =end comment
+    if $debug {
+        say "DEBUG: files in dir '$dir' to symlink:";
+        say "  $_" for @fils;
+    }
+    for @fils -> $path {
+        #say "DEBUG: skipping ignored file {$path.IO.basename}" if %ignore{$path.IO.basename}:exists;
+        next if %ignore{$path.IO.basename}:exists;
+        # symlink to /usr/local/bin
+        # ln -sf /opt/rakudo-pkg/bin/$f /usr/local/bin/$f.IO.basename
+        my $srcpath = $path;
+        my $topath = "/usr/local/bin/{$path.IO.basename}";
+        # create the symlink
+        symlink $srcpath, $topath;
+    }
+    #=end comment
     
 }
 

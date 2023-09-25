@@ -28,6 +28,9 @@ if not @*ARGS {
     exit
 }
 
+set-sym-links();
+say "DEBUG exit"; exit;
+
 unless $is-root {
     say "FATAL: This program must be executed by the root user.";
     exit;
