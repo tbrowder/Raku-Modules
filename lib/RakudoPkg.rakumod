@@ -240,7 +240,7 @@ sub handle-prompt(:$res) is export {
     }
 }
 
-sub set-sym-links(:$debug) is export {
+sub manage-symlinks(:$delete, :$debug) is export {
     # for now set just bin progs in /opt-rakudo-pkg/bin
     # run this after installation is complete at
     # the end of sub install-raku
@@ -273,15 +273,23 @@ sub set-sym-links(:$debug) is export {
     for @fils -> $path {
         #say "DEBUG: skipping ignored file {$path.IO.basename}" if %ignore{$path.IO.basename}:exists;
         next if %ignore{$path.IO.basename}:exists;
+
         # symlink to /usr/local/bin
         # ln -sf /opt/rakudo-pkg/bin/$f /usr/local/bin/$f.IO.basename
         my $srcpath = $path;
-        my $topath = "/usr/local/bin/{$path.IO.basename}";
-        # create the symlink
-        symlink $srcpath, $topath;
+        my $link = "/usr/local/bin/{$path.IO.basename}";
+        # create the symlink OR remove it
+        # if it exists, leave it alone unless unlinking
+        my $link-exists = $link.IO.s ?? True !! False;
+        if $link-exists {
+            unlink $link if $delete;
+        }
+        else {
+            next if $delete;
+            symlink $srcpath, $link;
+        }
     }
     #=end comment
-    
 }
 
 sub install-raku(:$debug) is export {
@@ -354,6 +362,10 @@ sub remove-raku() is export {
             say "Exiting...";
             exit;
         }
+
+        # first remove any symlinks to avoid dangling links
+        manage-symlinks :delete;
+
         shell "apt-get remove rakudo-pkg";
         shell "rm -rf $dir" if $dir.IO.d;
         say "Package '$pkg' and directory '$dir' have been removed.";

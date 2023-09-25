@@ -28,7 +28,8 @@ if not @*ARGS {
     exit
 }
 
-set-sym-links();
+manage-symlinks();
+manage-symlinks(:delete);
 say "DEBUG exit"; exit;
 
 unless $is-root {
