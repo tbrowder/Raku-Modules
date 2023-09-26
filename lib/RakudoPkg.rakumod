@@ -445,7 +445,7 @@ sub handle-path-file($f, :$user, :$debug) is export {
     #   has it been modified? (it would have a line with RAKUDO on it)
     my $exists  = $f.IO.f ?? True !! False;   
     unless $exists {
-        say "  Skipping non-existant file: $f";
+        say "  Skipping non-existent file: $f";
         return;
     }
 
