@@ -431,9 +431,15 @@ sub install-path(:$user, :$debug) is export {
     my $u1 = "{$home}/.bashrc";
     my $u2 = "{$home}/.profile";
     my $u3 = "{$home}/.bash_aliases";
-    my $u4 = "{$home}/.xsessionrc";
+    my $u4 = "{$home}/.bash_profile";
+    my $u5 = "{$home}/.xsessionrc";
 
-    for $a1, $a2, $a3, $u1, $u2, $u3, $u4 -> $f {
+    for $u1, $u2, $u3, $u4, $u5 -> $f {
+        handle-path-file $f, :$user, :$debug;
+    }
+    return if $user ne "root";
+
+    for $a1, $a2, $a3 -> $f {
         handle-path-file $f, :$user, :$debug;
     }
 }
@@ -444,9 +450,10 @@ sub handle-path-file($f, :$user, :$debug) is export {
     #   is it original? (it would have a '$f.orig' version in the same directory)
     #   has it been modified? (it would have a line with RAKUDO on it)
     my $exists  = $f.IO.f ?? True !! False;   
-    unless $exists {
-        say "  Skipping non-existent file: $f";
-        return;
+    if not $exists {
+        say "  Creating non-existent file: $f";
+        spurt $f, "";
+        $exists = True;
     }
 
     my $is-orig = "$f.orig".IO.f ?? False !! True;   
@@ -467,6 +474,11 @@ sub handle-path-file($f, :$user, :$debug) is export {
         say "    Is it original? $is-orig";
         say "    Number of lines: {@lines.elems}";
     }
+    if $is-orig {
+        # make a copy
+         copy $f, "$f.orig";
+    }
+
 }
 
 sub get-backup-name($f, :$use-date --> Str) is export {
