@@ -485,20 +485,20 @@ sub handle-path-file($f, :$user, :$restore, :$debug) is export {
     #   .xsessionrc
     return unless $f ~~ /\. bash_profile|xsessionrc /;
 
-    my $a = q/to/HERE/;
+    my $a = q:to/HERE/;
     if [ -f ~/.profile ]; then
         . ~/.profile 
     fi
     HERE
 
-    my $b = q/to/HERE/;
+    my $b = q:to/HERE/;
     if [ -f ~/.bashrc ]; then
         . ~/.bashrc 
     fi
     HERE
     
     my $mlines = 0; # checking for three matching lines
-    for @f.lines {
+    for @lines {
     }
 
 
