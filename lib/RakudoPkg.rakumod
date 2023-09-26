@@ -425,6 +425,7 @@ sub install-path(:$user, :$debug) is export {
     # For all users:
     my $a1 = "/etc/bash.bashrc";
     my $a2 = "/etc/profile";
+    my $a3 = "/etc/profile.d/rakudo-pkg.sh";
 
     # Particular users:
     my $u1 = "{$home}/.bashrc";
@@ -432,7 +433,7 @@ sub install-path(:$user, :$debug) is export {
     my $u3 = "{$home}/.bash_aliases";
     my $u4 = "{$home}/.xsessionrc";
 
-    for $a1, $a2, $u1, $u2, $u3, $u4 -> $f {
+    for $a1, $a2, $a3, $u1, $u2, $u3, $u4 -> $f {
         handle-path-file $f, :$user, :$debug;
     }
 }
@@ -457,9 +458,10 @@ sub handle-path-file($f, :$user, :$debug) is export {
         say "      $_" for @lines;
         say "    End contents for file '$f'";
         =end comment
+        my $tag = "RAKUDO_PATHS";
         for @lines.kv -> $i, $line {
-            if $line ~~ /RAKUDO/ {
-                say "  Found RAKUDO on line {$i+1}";
+            if $line ~~ /$tag/ {
+                say "    Found $tag on line {$i+1}";
             }
         }
         say "    Is it original? $is-orig";
