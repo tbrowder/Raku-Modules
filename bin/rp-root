@@ -28,9 +28,7 @@ if not @*ARGS {
     exit
 }
 
-my $f = "/some/file";
-my $bu = get-backup-name($f);
-say $bu;
+install-path :$user, :debug;    
 say "DEBUG exit"; exit;
 
 unless $is-root {

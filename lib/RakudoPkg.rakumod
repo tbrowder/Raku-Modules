@@ -199,7 +199,7 @@ class OS is export {
 
 sub get-paths($dir = '.' --> Hash) is export {
     # Given any directory, recursively collect all files
-    # and directories below it
+    # and directories below it.
     my @todo = $dir.IO;
     my @fils;
     my @dirs;
@@ -233,6 +233,8 @@ sub is-ubuntu(--> Bool) {
 }
 
 sub handle-prompt(:$res) is export {
+    # $res is the return from a prompt asking
+    # for a 'yes' response to take action or quit.
     if $res ~~ /^:i y/ {
         say "Proceeding...";
     }
@@ -395,34 +397,94 @@ sub remove-zef() is export {
 }
 
 sub install-path(:$user, :$debug) is export {
-    my $home = "/home/$user";
+    # $user is 'root' or other valid user name.
+    my $home;
+    if $user eq 'root' {
+        $home = "/root";
+    }
+    else {
+        $home = "/home/$user";
+    }
 
     # Files needing changing or updating on Debian for Bash users:
-    # 
-    # For all users:
-    my $d1 = "/etc/bash.bashrc";
-    my $d2 = "/etc/profile";
-    # Particular users:
-    my $d3 = "{$home}/.bashrc";
-    my $d4 = "{$home}/.profile";
-    my $d5 = "{$home}/.bash_aliases";
-    my $d6 = "{$home}/.xsessionrc";
+    # We add a couple of lines as an embedded Bash action
+    # based on the RAKUDO_PKG script:
+    # except: put the rakudo-pkg path 
+    # script in FRONT of the existing $PATH
+    #=begin comment
+    my $rpath = q:to/HERE/;
+    RAKUDO_PATHS=/opt/rakudo-pkg/bin:/opt/rakudo-pkg/share/perl6/bin:/
+    if ! echo "$PATH" | /bin/grep -Eq "(^|:)$RAKUDO_PATHS($|:)" ; then
+        #export PATH="$PATH:$RAKUDO_PATHS"
+        export PATH="$RAKUDO_PATHS:$PATH"
+    fi
+    HERE
+    #=end comment
 
-    
-    
+    # Affected files
+    # For all users:
+    my $a1 = "/etc/bash.bashrc";
+    my $a2 = "/etc/profile";
+
+    # Particular users:
+    my $u1 = "{$home}/.bashrc";
+    my $u2 = "{$home}/.profile";
+    my $u3 = "{$home}/.bash_aliases";
+    my $u4 = "{$home}/.xsessionrc";
+
+    for $a1, $a2, $u1, $u2, $u3, $u4 -> $f {
+        handle-path-file $f, :$user, :$debug;
+    }
 }
 
-sub get-backup-name($f --> Str) is export {
-    # Given a file name, return a backup name consistinh
-    # of the original name with a ".YYYY-MM-DDThh:mm:ssZ";
-    my $dt = DateTime.now: :timezone(0);
-    my $y = sprintf "%02d", $dt.year;
-    my $M = sprintf "%02d", $dt.month;
-    my $d = sprintf "%02d", $dt.day;
-    my $h = sprintf "%02d", $dt.hour;
-    my $m = sprintf "%02d", $dt.minute;
-    my $s = sprintf "%02d", $dt.second;
+sub handle-path-file($f, :$user, :$debug) is export {
+    # For each file:
+    #   does it exist yet?
+    #   is it original? (it would have a '$f.orig' version in the same directory)
+    #   has it been modified? (it would have a line with RAKUDO on it)
+    my $exists  = $f.IO.f ?? True !! False;   
+    unless $exists {
+        say "  Skipping non-existant file: $f";
+        return;
+    }
 
-    my $b = "{$f}.{$y}-{$M}-{$d}T{$h}{$m}.{$s}Z";
+    my $is-orig = "$f.orig".IO.f ?? False !! True;   
+    my @lines = $f.IO.lines;
+    if $debug {
+        say "  Inspecting file '$f'";
+        =begin comment
+        say "    Contents:";
+        say "      $_" for @lines;
+        say "    End contents for file '$f'";
+        =end comment
+        for @lines.kv -> $i, $line {
+            if $line ~~ /RAKUDO/ {
+                say "  Found RAKUDO on line {$i+1}";
+            }
+        }
+        say "    Is it original? $is-orig";
+        say "    Number of lines: {@lines.elems}";
+    }
+}
+
+sub get-backup-name($f, :$use-date --> Str) is export {
+    # Given a file name, return a backup name consisting
+    # of the original name with either '.orig' appended
+    # or the current time in format '.YYYY-MM-DDThh:mm:ssZ'.
+    my $nam;
+    if $use-date {
+        my $dt = DateTime.now: :timezone(0);
+        my $y = sprintf "%02d", $dt.year;
+        my $M = sprintf "%02d", $dt.month;
+        my $d = sprintf "%02d", $dt.day;
+        my $h = sprintf "%02d", $dt.hour;
+        my $m = sprintf "%02d", $dt.minute;
+        my $s = sprintf "%02d", $dt.second;
+        $nam = "{$f}.{$y}-{$M}-{$d}T{$h}{$m}.{$s}Z";
+     }
+     else {
+        $nam = "{$f}.orig";
+     }
+     $nam
 }
 
