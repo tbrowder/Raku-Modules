@@ -396,7 +396,7 @@ sub remove-zef() is export {
     say "DEBUG: sub 'remove-zef' is not yet usable...";
 }
 
-sub install-path(:$user, :$debug) is export {
+sub install-path(:$user, :$restore, :$debug) is export {
     # $user is 'root' or other valid user name.
     my $home;
     if $user eq 'root' {
@@ -435,20 +435,21 @@ sub install-path(:$user, :$debug) is export {
     my $u5 = "{$home}/.xsessionrc";
 
     for $u1, $u2, $u3, $u4, $u5 -> $f {
-        handle-path-file $f, :$user, :$debug;
+        handle-path-file $f, :$user, :$restore, :$debug;
     }
     return if $user ne "root";
 
     for $a1, $a2, $a3 -> $f {
-        handle-path-file $f, :$user, :$debug;
+        handle-path-file $f, :$user, :$restore, :$debug;
     }
 }
 
-sub handle-path-file($f, :$user, :$debug) is export {
+sub handle-path-file($f, :$user, :$restore, :$debug) is export {
     # For each file:
     #   does it exist yet?
     #   is it original? (it would have a '$f.orig' version in the same directory)
     #   has it been modified? (it would have a line with RAKUDO on it)
+    #   shall we restore it to its original form (possibly empty or non-existent)
     my $exists  = $f.IO.f ?? True !! False;   
     if not $exists {
         say "  Creating non-existent file: $f";
@@ -478,6 +479,28 @@ sub handle-path-file($f, :$user, :$debug) is export {
         # make a copy
          copy $f, "$f.orig";
     }
+
+    # check for and add missing lines to certain files:
+    #   .bash_profile
+    #   .xsessionrc
+    return unless $f ~~ /\. bash_profile|xsessionrc /;
+
+    my $a = q/to/HERE/;
+    if [ -f ~/.profile ]; then
+        . ~/.profile 
+    fi
+    HERE
+
+    my $b = q/to/HERE/;
+    if [ -f ~/.bashrc ]; then
+        . ~/.bashrc 
+    fi
+    HERE
+    
+    my $mlines = 0; # checking for three matching lines
+    for @f.lines {
+    }
+
 
 }
 
