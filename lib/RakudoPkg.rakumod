@@ -353,7 +353,24 @@ sub install-raku(:$debug) is export {
     note "Installation of raku via rakudo-pkg is complete";
     note "Removal of OS package 'rakudo' is complete";
     =end comment
-}
+
+    # add path info to /etc/profile.d/rakudo-pkg.sh
+    my $f = "/etc/profile.d/rakudo-pkg.sh";
+    my $rpath = q:to/HERE/;
+    RAKUDO_PATHS=/opt/rakudo-pkg/bin:/opt/rakudo-pkg/share/perl6/bin:/
+    if ! echo "$PATH" | /bin/grep -Eq "(^|:)$RAKUDO_PATHS($|:)" ; then
+        #export PATH="$PATH:$RAKUDO_PATHS"
+    fi
+    HERE
+    if not $f.IO.d {
+        say "Adding new PATH component in file '$f'...";
+        spurt $f, $rpath;   
+    }
+    else {
+        # dang!
+    }
+
+} # sub install-raku
 
 sub remove-raku() is export {
     my $dir = "/opt/rakudo-pkg";
