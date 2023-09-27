@@ -33,10 +33,12 @@ C</opt/rakudo-pkg> directory.
 
 There are three steps to follow.
 
-=head3 Step 1 - Install the Debian or Ubuntu C<rakudo> package
+=head3 Step 1 - Install the Debian or Ubuntu C<rakudo> package and its C<zef>
+
+Since C<zef> depends on C<raku> all need to do is install it:
 
 =begin code
-$ sudo apt-get install rakudo
+$ sudo apt-get install perl6-raku
 =end code
 
 We use the distribution's likely older version to 'bootstrap' our desired Rakudo framework.

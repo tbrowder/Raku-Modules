@@ -26,9 +26,11 @@ Normally you will be using this module on a system which has not had Raku instal
 
 There are three steps to follow.
 
-### Step 1 - Install the Debian or Ubuntu `rakudo` package
+### Step 1 - Install the Debian or Ubuntu `rakudo` package and its `zef`
 
-    $ sudo apt-get install rakudo
+Since `zef` depends on `raku` all need to do is install it:
+
+    $ sudo apt-get install perl6-raku
 
 We use the distribution's likely older version to 'bootstrap' our desired Rakudo framework.
 
