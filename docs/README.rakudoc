@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-B<RakudoPkg> - Provides tools for easing installation and use of the 'rakudo-pkg' system for Debian and Ubuntu
+B<RakudoPkg> - Provides tools for easing installation and use of the C<rakudo-pkg> system for Debian and Ubuntu
 
 =head1 SYNOPSIS
 
