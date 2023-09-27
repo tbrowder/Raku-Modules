@@ -1,4 +1,4 @@
-[![Actions Status](https://github.com/tbrowder/RakudoPkg/actions/workflows/test.yml/badge.svg)](https://github.com/tbrowder/RakudoPkg/actions)
+[![Actions Status](https://github.com/tbrowder/RakudoPkg/actions/workflows/linux.yml/badge.svg)](https://github.com/tbrowder/RakudoPkg/actions) [![Actions Status](https://github.com/tbrowder/RakudoPkg/actions/workflows/macos.yml/badge.svg)](https://github.com/tbrowder/RakudoPkg/actions) [![Actions Status](https://github.com/tbrowder/RakudoPkg/actions/workflows/windows.yml/badge.svg)](https://github.com/tbrowder/RakudoPkg/actions)
 
 NAME
 ====
