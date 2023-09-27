@@ -15,7 +15,7 @@ use RakudoPkg;
 DESCRIPTION
 ===========
 
-**RakudoPkg** is a Raku module with programs for the root user to bootstrap the 'rakudo-pkg' installation by use of a system 'rakudo' package installation. After successful bootstrapping, the system's 'rakudo' package should be deleted to avoid conflicts.
+**RakudoPkg** is a Raku module with programs for the root user to bootstrap the `rakudo-pkg` installation by use of a system `rakudo` package installation. After successful bootstrapping, the system's `rakudo` package should be deleted to avoid conflicts.
 
 Note this package is designed for the purpose of setting up and standardizing multi-user Linux hosts for classrooms or computer laboratories.
 
@@ -30,7 +30,7 @@ There are three steps to follow.
 
     $ sudo apt-get install rakudo
 
-We use the distribution's version to 'bootstrap' our desired Rakudo framework.
+We use the distribution's likely older version to 'bootstrap' our desired Rakudo framework.
 
 ### Step 2 - Install the `rakudo-pkg` framework
 
@@ -38,15 +38,15 @@ We use the distribution's version to 'bootstrap' our desired Rakudo framework.
 
 The command does the following:
 
-  * deletes any existing /opt/rakudo-pkg directory
+  * deletes any existing `/opt/rakudo-pkg` directory
 
-  * installs the rakudo-pkg framework
+  * installs the `rakudo-pkg` framework
 
-  * installs the new rakudo package
+  * installs the new `rakudo` package
 
-Prompts are shown at critical points so you can abort the process if necessary. points.
+Prompts are shown at critical points so you can abort the process if necessary.
 
-### Step 3 - Remove the system's 'rakudo' package
+### Step 3 - Remove the system's `rakudo` package
 
     $ sudo apt-get remove rakudo
 
@@ -74,7 +74,7 @@ The pertinent parts of that bash script are shown here:
     rm -rf /var/lib/apt/lists/*
     apt-get update
 
-    echo "Removal of rakudo-pkg is complete."
+    echo "Removal of 'rakudo-pkg' is complete."
     exit
 
 Note the removal does not delete anything in any users' home directory, so there may be `raku`- or `zef`-related artifacts remaining in those places.
