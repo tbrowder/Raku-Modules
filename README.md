@@ -3,7 +3,7 @@
 NAME
 ====
 
-**RakudoPkg** - Provides tools for easing use of the 'rakudo-pkg' system for Debian and Ubuntu
+**RakudoPkg** - Provides tools for easing installation and use of the 'rakudo-pkg' system for Debian and Ubuntu
 
 SYNOPSIS
 ========
@@ -17,24 +17,24 @@ DESCRIPTION
 
 **RakudoPkg** is a Raku module with programs for the root user to bootstrap the 'rakudo-pkg' installation by use of a system 'rakudo' package installation. After successful bootstrapping, the system's 'rakudo' package should be deleted to avoid conflicts.
 
-After the system's 'rakudo' is removed, the 'root' user can manage his or her 'zef' with the included program 'manage-zef'. A regular user can use it, too. The program enables the user to install or remove selected Raku module packages.
-
 Note this package is designed for the purpose of standardizing multi-user Linux hosts for classrooms or computer laboratories.
 
 Procedures
 ----------
 
-Normally you will be using this module on a system which has not had Raku installed other than with its normal package installation, but it can uninstall completely any previous such installations.
+Normally you will be using this module on a system which has not had Raku installed other than with its normal package installation, but it will uninstall completely any previous `rakudo-pkg` installation in an existing `/opt/rakudo-pkg` directory.
 
-### Install the Debian or Ubuntu `rakudo` package
+There are three steps to follow.
+
+### Step 1 - Install the Debian or Ubuntu `rakudo` package
 
     $ sudo apt-get install rakudo
 
 We use the distro's version to 'bootstrap' our desired Rakudo framework.
 
-### Install the `rakudo-pkg` framework
+### Step 2 - Install the `rakudo-pkg` framework
 
-    $ sudo rp-root install raku
+    $ sudo install-rakudo-pkg
 
 The command does the following:
 
@@ -44,33 +44,9 @@ The command does the following:
 
   * installs the new rakudo package
 
-### Remove the system's 'rakudo' package
+### Step 3 - Remove the system's 'rakudo' package
 
-    $ sudo rp-root install raku
-
-### Install the `zef` module installer
-
-    $ sudo rp-root install zef
-
-The command does the following:
-
-  * deletes any existing .raku, .zef, or zef directories for root.
-
-  * installs and updates zef for root
-
-### Install a curated set of modules for public use
-
-A list of modules the author uses is in `%?RESOURCES`, but another list may be provided if desired. The input list must be a text file with one module name per line (along with any adverbs desired).
-
-### Install zef for a user
-
-    $ rp-user install zef
-
-The command does the following:
-
-  * deletes any existing .raku, .zef, or zef directories for the user.
-
-  * installs and updates zef for the user.
+    $ sudo apt-get remove rakudo
 
 AUTHOR
 ======

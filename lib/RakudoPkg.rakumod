@@ -308,6 +308,7 @@ sub install-raku(:$debug) is export {
     }
     else {
        say "Directory '$dir' does not exist.";
+       say "Installing 'rakudo-pkg'...";
     }
     my $os = OS.new;
 
@@ -320,7 +321,6 @@ sub install-raku(:$debug) is export {
        nxadm's keyring location = {$os.keyring-location}
        HERE
     }
-    #Exiting."; exit;
 
     if $os.name !~~ /:i debian / {
         say "FATAL: Only Debian can be handled for now.";
@@ -344,7 +344,6 @@ sub install-raku(:$debug) is export {
     shell "curl -1sLf 'https://dl.cloudsmith.io/public/nxadm-pkgs/rakudo-pkg/config.deb.txt?distro={$os.name}&codename={$os.version-name}' > /etc/apt/sources.list.d/nxadm-pkgs-rakudo-pkg.list";
     shell "apt-get update";
     shell "apt-get install rakudo-pkg";
-    shell "apt-get remove rakudo -y";
 
     =begin comment
     set-sym-links();
