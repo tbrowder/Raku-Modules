@@ -15,7 +15,9 @@ use RakudoPkg;
 DESCRIPTION
 ===========
 
-**RakudoPkg** is a Raku module with one script for the root user to bootstrap the 'rakudo-pkg' installation by use of a rudumentary 'rakudo' package installation. After successful bootstrapping, the system's 'rakudo' package will be deleted.
+**RakudoPkg** is a Raku module with programs for the root user to bootstrap the 'rakudo-pkg' installation by use of a system 'rakudo' package installation. After successful bootstrapping, the system's 'rakudo' package should be deleted to avoid conflicts.
+
+After the system's 'rakudo' is removed, the 'root' user can manage his or her 'zef' with the included program 'manage-zef'. A regular user can use it, too. The program enables the user to install or remove selected Raku module packages.
 
 Note this package is designed for the purpose of standardizing multi-user Linux hosts for classrooms or computer laboratories.
 
@@ -42,7 +44,9 @@ The command does the following:
 
   * installs the new rakudo package
 
-  * removes the system rakudo package
+### Remove the system's 'rakudo' package
+
+    $ sudo rp-root install raku
 
 ### Install the `zef` module installer
 
