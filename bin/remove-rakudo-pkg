@@ -17,6 +17,8 @@ fi
 #echo "DEBUG exit"
 #exit
 
+echo "Starting removal of 'rakudo-pkg'..."
+
 apt-get remove rakudo-pkg
 rm -rf /opt/rakudo-pkg
 rm -rf /etc/profile.d/rakudo-pkg.sh
@@ -29,5 +31,6 @@ rm -rf /var/lib/apt/lists/*
 apt-get update
 
 echo "Removal of rakudo-pkg is complete."
+exit
 
 

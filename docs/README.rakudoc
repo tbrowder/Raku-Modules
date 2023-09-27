@@ -22,7 +22,7 @@ to avoid conflicts.
 Note this package is designed for the purpose of standardizing multi-user Linux hosts
 for classrooms or computer laboratories.
 
-=head2 Procedures
+=head2 Procedures for installation
 
 Normally you will be using this module on a system
 which has not had Raku installed other than with its normal
@@ -57,6 +57,35 @@ The command does the following:
 =begin code
 $ sudo apt-get remove rakudo
 =end code
+
+=head2 Procedures for B<complete> removal
+
+Should you ever want to remove the C<rakudo-pkg> installation,
+run the following program as root: C<remove-rakudo-pkg>.
+
+The pertinent parts of that bash script are shown here:
+
+=begin code
+echo "Starting removal of 'rakudo-pkg'..."
+
+apt-get remove rakudo-pkg
+rm -rf /opt/rakudo-pkg
+rm -rf /etc/profile.d/rakudo-pkg.sh
+apt-get update
+
+# clean repository info
+rm /etc/apt/sources.list.d/nxadm-pkgs-rakudo-pkg.list
+apt-get clean
+rm -rf /var/lib/apt/lists/*
+apt-get update
+
+echo "Removal of rakudo-pkg is complete."
+exit
+=end code
+
+Note the removal does not delete anything in any users' home
+directory, so there may be C<raku>- or C<zef>-related artifacts remaining
+in those places.
 
 =head1 AUTHOR
 
