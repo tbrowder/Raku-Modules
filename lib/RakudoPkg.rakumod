@@ -362,7 +362,7 @@ sub install-raku(:$debug) is export {
         export PATH="$PATH:$RAKUDO_PATHS"
     fi
     HERE
-    if not $f.IO.d {
+    if not $f.IO.f {
         say "Adding new PATH component in file '$f'...";
         spurt $f, $rpath;   
     }
