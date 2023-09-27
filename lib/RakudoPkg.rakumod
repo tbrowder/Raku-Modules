@@ -359,7 +359,7 @@ sub install-raku(:$debug) is export {
     my $rpath = q:to/HERE/;
     RAKUDO_PATHS=/opt/rakudo-pkg/bin:/opt/rakudo-pkg/share/perl6/bin:/
     if ! echo "$PATH" | /bin/grep -Eq "(^|:)$RAKUDO_PATHS($|:)" ; then
-        #export PATH="$PATH:$RAKUDO_PATHS"
+        export PATH="$PATH:$RAKUDO_PATHS"
     fi
     HERE
     if not $f.IO.d {

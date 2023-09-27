@@ -75,7 +75,7 @@ if $rdir.IO.d {
     my $res = prompt "Continue (y/N)? ";
     handle-prompt :$res;
     say "Removing Installing rakudo-pkg in '$rdir'...";
-    shell "rm -rf $pdir";
+    shell "rm -rf $rdir";
 }
 
 say "Installing rakudo-pkg in /opt...";
