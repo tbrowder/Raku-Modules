@@ -23,7 +23,7 @@ There are three steps to follow.
 
 ### Step 1 - Install the Debian or Ubuntu `rakudo` package and its `zef`
 
-Since `zef` depends on `raku` all need to do is install it:
+Since `zef` depends on `raku` all we need to do is install its package (note the package name is different):
 
     $ sudo apt-get install perl6-raku
 

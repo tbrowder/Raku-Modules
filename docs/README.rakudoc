@@ -31,7 +31,8 @@ There are three steps to follow.
 
 =head3 Step 1 - Install the Debian or Ubuntu C<rakudo> package and its C<zef>
 
-Since C<zef> depends on C<raku> all need to do is install it:
+Since C<zef> depends on C<raku> all we need to do is install its package (note the package name
+is different):
 
 =begin code
 $ sudo apt-get install perl6-raku
