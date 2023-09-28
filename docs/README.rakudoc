@@ -77,7 +77,12 @@ non-conflicting use by both the root user and normal users.
 =head2 Procedures for B<complete> removal
 
 Should you ever want to remove the C<rakudo-pkg> installation,
-run the following program as root: C<remove-rakudo-pkg>.
+run the following RakudoPkg program as root: C<remove-rakudo-pkg>.
+
+=begin code
+$ cd RakudoPkg
+$ sudo ./bin/install-rakudo-pkg
+=end code
 
 The pertinent parts of that bash script are shown here:
 

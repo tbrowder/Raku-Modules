@@ -59,7 +59,10 @@ Note the Raku package manager `zef` is not involved at this point. Any previous 
 Procedures for **complete** removal
 -----------------------------------
 
-Should you ever want to remove the `rakudo-pkg` installation, run the following program as root: `remove-rakudo-pkg`.
+Should you ever want to remove the `rakudo-pkg` installation, run the following RakudoPkg program as root: `remove-rakudo-pkg`.
+
+    $ cd RakudoPkg
+    $ sudo ./bin/install-rakudo-pkg
 
 The pertinent parts of that bash script are shown here:
 
