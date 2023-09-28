@@ -4,21 +4,13 @@
 
 B<RakudoPkg> - Provides tools for easing installation and use of the C<rakudo-pkg> system for Debian and Ubuntu
 
-=head1 SYNOPSIS
-
-=begin code :lang<raku>
-
-use RakudoPkg;
-
-=end code
-
 =head1 DESCRIPTION
 
-B<WARNING> - This module cannot be installed by C<zef>. Its repository must be downloaded
+This module distribution cannot be installed by C<zef>. Its repository must be downloaded
 onto the desired host and then installed by the root user from its top-level directory
 in a similar manner to the way C<zef> is installed on a new system.
 
-B<RakudoPkg> is a Raku module with programs for the root user to bootstrap the C<rakudo-pkg>
+The package contains programs for the root user to bootstrap the C<rakudo-pkg>
 installation by use of a system C<rakudo> package installation.
 After successful bootstrapping, the system's C<rakudo> package should be deleted
 to avoid conflicts.
@@ -45,11 +37,12 @@ Since C<zef> depends on C<raku> all need to do is install it:
 $ sudo apt-get install perl6-raku
 =end code
 
-We use the distribution's likely older version to 'bootstrap' our desired Rakudo framework.
+We will use the distribution's likely older version to 'bootstrap' our desired Rakudo framework.
 
 =head3 Step 2 - Install the C<rakudo-pkg> framework
 
 =begin code
+$ git clone https://github.com/tbrowder/RakudoPkg.git
 $ cd RakudoPkg
 $ sudo -s
 # raku -I ./bin/install-rakudo-pkg
