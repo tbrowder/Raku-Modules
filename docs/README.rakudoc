@@ -31,11 +31,11 @@ There are three steps to follow.
 
 =head3 Step 1 - Install the Debian or Ubuntu C<rakudo> package and its C<zef>
 
-Since C<zef> depends on C<raku> all we need to do is install its package (note the package name
+Since C<zef> depends on C<raku>, all we need to do is install its package (note the package name
 is different):
 
 =begin code
-$ sudo apt-get install perl6-raku
+$ sudo apt-get install perl6-zef
 =end code
 
 We will use the distribution's likely older version to 'bootstrap' our desired Rakudo framework.

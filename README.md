@@ -23,9 +23,9 @@ There are three steps to follow.
 
 ### Step 1 - Install the Debian or Ubuntu `rakudo` package and its `zef`
 
-Since `zef` depends on `raku` all we need to do is install its package (note the package name is different):
+Since `zef` depends on `raku`, all we need to do is install its package (note the package name is different):
 
-    $ sudo apt-get install perl6-raku
+    $ sudo apt-get install perl6-zef
 
 We will use the distribution's likely older version to 'bootstrap' our desired Rakudo framework.
 
