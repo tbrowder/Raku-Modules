@@ -62,7 +62,7 @@ Procedures for **complete** removal
 Should you ever want to remove the `rakudo-pkg` installation, run the following RakudoPkg program as root: `remove-rakudo-pkg`.
 
     $ cd RakudoPkg
-    $ sudo ./bin/install-rakudo-pkg
+    $ sudo ./bin/remove-rakudo-pkg
 
 The pertinent parts of that bash script are shown here:
 
