@@ -15,6 +15,8 @@ use RakudoPkg;
 DESCRIPTION
 ===========
 
+**WARNING** - This module cannot be installed by `zef`. Its repository must be downloaded onto the desired host and then installed by the root user from its top-level directory in a similar manner to the way `zef` is installed on a new system.
+
 **RakudoPkg** is a Raku module with programs for the root user to bootstrap the `rakudo-pkg` installation by use of a system `rakudo` package installation. After successful bootstrapping, the system's `rakudo` package should be deleted to avoid conflicts.
 
 Note this package is designed for the purpose of setting up and standardizing multi-user Linux hosts for classrooms or computer laboratories.
@@ -36,7 +38,9 @@ We use the distribution's likely older version to 'bootstrap' our desired Rakudo
 
 ### Step 2 - Install the `rakudo-pkg` framework
 
-    $ sudo install-rakudo-pkg
+    $ cd RakudoPkg
+    $ sudo -s
+    # raku -I ./bin/install-rakudo-pkg
 
 The command does the following:
 
@@ -49,6 +53,8 @@ The command does the following:
 Prompts are shown at critical points so you can abort the process if necessary.
 
 ### Step 3 - Remove the system's `rakudo` package
+
+After becoming a normal user again:
 
     $ sudo apt-get remove rakudo
 

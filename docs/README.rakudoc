@@ -14,6 +14,10 @@ use RakudoPkg;
 
 =head1 DESCRIPTION
 
+B<WARNING> - This module cannot be installed by C<zef>. Its repository must be downloaded
+onto the desired host and then installed by the root user from its top-level directory
+in a similar manner to the way C<zef> is installed on a new system.
+
 B<RakudoPkg> is a Raku module with programs for the root user to bootstrap the C<rakudo-pkg>
 installation by use of a system C<rakudo> package installation.
 After successful bootstrapping, the system's C<rakudo> package should be deleted
@@ -46,7 +50,9 @@ We use the distribution's likely older version to 'bootstrap' our desired Rakudo
 =head3 Step 2 - Install the C<rakudo-pkg> framework
 
 =begin code
-$ sudo install-rakudo-pkg
+$ cd RakudoPkg
+$ sudo -s
+# raku -I ./bin/install-rakudo-pkg
 =end code
 
 The command does the following:
@@ -59,6 +65,8 @@ Prompts are shown at critical points so you can
 abort the process if necessary.
 
 =head3 Step 3 - Remove the system's C<rakudo> package
+
+After becoming a normal user again:
 
 =begin code
 $ sudo apt-get remove rakudo
