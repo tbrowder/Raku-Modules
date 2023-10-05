@@ -38,6 +38,9 @@ whose contents sets
   RAKUDO_PATHS=/opt/rakudo-pkg/bin:/opt/rakudo-pkg/share/perl6/bin
   export PATH="$PATH:$RAKUDO-PATHS"
 
+BUT THE SYMLINK IS BAD--DELETE IT AND REPLACE IT!
+THE DIR .../perl6/bin is missing, as are other dirs like .../site, etc.
+
 2. There is also a script to set the path manually: 
   '/opt/rakudo-pkg/bin/add-rakudo-to-path'. Its contents are a complex
 bash script to do accomplish the same as method 1.
